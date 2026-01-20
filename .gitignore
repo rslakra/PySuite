@@ -28,6 +28,7 @@ dist/
 *.obj
 *.pyc
 *.class
+*.app
 
 # Dependency directories
 node_modules/

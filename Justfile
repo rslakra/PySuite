@@ -39,30 +39,30 @@ clean:
     @printf "\033[32m✓ Virtual environment removed\033[0m\n"
     @echo ""
 
-# Install Sleepless dependencies
-install-sleepless:
-    @printf "\033[36mInstalling Sleepless dependencies...\033[0m\n"
+# Install Awake dependencies
+install-awake:
+    @printf "\033[36mInstalling Awake dependencies...\033[0m\n"
     ./{{venv_name}}/bin/pip install --upgrade pip
-    ./{{venv_name}}/bin/pip install -r sleepless/requirements.txt
-    @printf "\033[32m✓ Sleepless dependencies installed\033[0m\n"
+    ./{{venv_name}}/bin/pip install -r awake/requirements.txt
+    @printf "\033[32m✓ Awake dependencies installed\033[0m\n"
     @echo ""
 
-# Run Sleepless menubar app
-run-sleepless:
-    @printf "\033[36mStarting Sleepless menubar app...\033[0m\n"
-    ./{{venv_name}}/bin/python sleepless/menubar_sleepless.py
+# Run Awake menubar app
+run-awake:
+    @printf "\033[36mStarting Awake menubar app...\033[0m\n"
+    ./{{venv_name}}/bin/python awake/menubar.py
 
-# Build Sleepless app bundle
-build-sleepless:
-    @printf "\033[36mBuilding Sleepless.app...\033[0m\n"
-    cd sleepless && ./build.sh
-    @printf "\033[32m✓ Build complete! Check sleepless/Sleepless.app\033[0m\n"
+# Build Awake app bundle
+build-awake:
+    @printf "\033[36mBuilding Awake.app...\033[0m\n"
+    cd awake && ./build.sh
+    @printf "\033[32m✓ Build complete! Check awake/Awake.app\033[0m\n"
 
-# Build Sleepless app with PyInstaller (requires: pip install pyinstaller)
-build-sleepless-pyinstaller:
-    @printf "\033[36mBuilding Sleepless.app with PyInstaller...\033[0m\n"
-    ./{{venv_name}}/bin/pyinstaller sleepless/sleepless.spec
-    @printf "\033[32m✓ Build complete! Check dist/Sleepless.app\033[0m\n"
+# Build Awake app with PyInstaller (requires: pip install pyinstaller)
+build-awake-pyinstaller:
+    @printf "\033[36mBuilding Awake.app with PyInstaller...\033[0m\n"
+    ./{{venv_name}}/bin/pyinstaller awake/awake.spec
+    @printf "\033[32m✓ Build complete! Check dist/Awake.app\033[0m\n"
 
 # Show help
 help:
@@ -70,11 +70,9 @@ help:
     @echo ""
     @printf "\033[36m  just setup-venv\033[0m           - Create venv\n"
     @printf "\033[36m  just install-packages\033[0m     - Install dependencies/packages\n"
-    @printf "\033[36m  just install-sleepless\033[0m     - Install Sleepless dependencies\n"
-    @printf "\033[36m  just run-sleepless\033[0m         - Run Sleepless menubar app\n"
-    @printf "\033[36m  just build-sleepless\033[0m       - Build Sleepless.app bundle\n"
+    @printf "\033[36m  just install-awake\033[0m        - Install Awake dependencies\n"
+    @printf "\033[36m  just run-awake\033[0m            - Run Awake menubar app\n"
+    @printf "\033[36m  just build-awake\033[0m          - Build Awake.app bundle\n"
     @printf "\033[36m  just clean\033[0m                - Remove virtual environment\n"
     @printf "\033[36m  just help\033[0m                 - Show this help\n"
     @echo ""
-
-
