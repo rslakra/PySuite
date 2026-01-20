@@ -1,0 +1,75 @@
+# Photo Mixer - Justfile for common tasks
+
+# Variables
+venv_pip := "./venv/bin/pip"
+venv_python := "./venv/bin/python"
+
+# Default recipe - show available commands
+default:
+    @just --list --unsorted
+
+# Create virtual environment
+venv:
+    @echo "Creating virtual environment..."
+    python3 -m venv venv
+    @echo "✓ Virtual environment created in ./venv"
+
+# Install dependencies
+install: venv
+    @echo "Installing dependencies..."
+    {{venv_pip}} install --upgrade pip
+    {{venv_pip}} install -r requirements.txt
+    @echo "✓ Dependencies installed"
+
+# Run the photo mixer
+run background foreground *args:
+    #!/usr/bin/env bash
+    set -eu
+    
+    # Build the command with required arguments
+    CMD="{{venv_python}} src/photo_mixer.py --background \"{{background}}\" --foreground \"{{foreground}}\""
+    
+    # Parse optional arguments - handle each argument separately
+    for arg in {{args}}; do
+        if [[ "$arg" == output=* ]]; then
+            OUTPUT="${arg#output=}"
+            CMD="$CMD --output \"$OUTPUT\""
+        elif [[ "$arg" == blend_mode=* ]]; then
+            BLEND_MODE="${arg#blend_mode=}"
+            CMD="$CMD --blend-mode \"$BLEND_MODE\""
+        elif [[ "$arg" == opacity=* ]]; then
+            OPACITY="${arg#opacity=}"
+            CMD="$CMD --opacity \"$OPACITY\""
+        elif [[ "$arg" == bg_threshold=* ]]; then
+            BG_THRESHOLD="${arg#bg_threshold=}"
+            CMD="$CMD --bg-threshold \"$BG_THRESHOLD\""
+        fi
+    done
+    
+    # Execute the command
+    eval "$CMD"
+
+# Setup everything (venv + install)
+setup: install
+    @echo "✓ Setup complete! You can now run 'just run <bg> <fg>'"
+
+# Clean virtual environment
+clean:
+    @echo "Removing virtual environment..."
+    rm -rf venv
+    @echo "✓ Virtual environment removed"
+
+# Show help
+help:
+    @echo "Photo Mixer - Available commands:"
+    @echo ""
+    @echo "  just setup              - Create venv and install dependencies"
+    @echo "  just install            - Install dependencies (creates venv if needed)"
+    @echo "  just run <bg> <fg> [options] - Run photo mixer"
+    @echo "  just clean              - Remove virtual environment"
+    @echo "  just help               - Show this help message"
+    @echo ""
+    @echo "Examples:"
+    @echo "  just run images/original/bg.jpg images/original/fg.jpg"
+    @echo "  just run bg.jpg fg.jpg output=result.jpg blend_mode=multiply opacity=0.9"
+
