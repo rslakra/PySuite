@@ -1,1 +1,5 @@
 leapseconddata
+python-docx
+markdown
+pdf2docx
+docx2pdf
