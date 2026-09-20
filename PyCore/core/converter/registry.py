@@ -1,12 +1,9 @@
 from pathlib import Path
 
 from core.converter.abstract import AbstractConverter
-from core.converter.pdf import Pdf2WordConverter
-from core.converter.word import (
-    Markdown2WordConverter,
-    Word2MarkdownConverter,
-    Word2PdfConverter,
-)
+from core.converter.markdown import Word2MarkdownConverter
+from core.converter.pdf import Word2PdfConverter
+from office.word.converter import Markdown2WordConverter, Pdf2WordConverter
 
 _CONVERTERS: tuple[type[AbstractConverter], ...] = (
     Markdown2WordConverter,
@@ -30,7 +27,10 @@ def list_conversions() -> list[tuple[str, str]]:
     for converter_cls in _CONVERTERS:
         for source_ext in converter_cls.source_extensions:
             for dest_ext in converter_cls.dest_extensions:
-                conversions.add((source_ext, dest_ext))
+                # Collapse aliases (e.g. markdown -> md) for display
+                src = normalize_extension(f"file.{source_ext}")
+                dst = normalize_extension(f"file.{dest_ext}")
+                conversions.add((src, dst))
     return sorted(conversions)
 
 

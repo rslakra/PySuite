@@ -1,0 +1,7 @@
+leapseconddata
+python-docx
+markdown
+pdf2docx
+docx2pdf
+pandas>=2.0
+openpyxl>=3.1

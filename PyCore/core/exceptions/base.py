@@ -1,0 +1,26 @@
+class BaseException(Exception):
+    def __init__(self, message: str, cause: Exception | None = None) -> None:
+        """
+        Initializes the exception with the given message.
+
+        :param message: the message describing the exception
+        :param cause: the original exception that caused this exception, if any.
+            For exceptions raised during request handling, this is typically
+                * an LSPError for errors returned by the LSP server
+                * LanguageServerTerminatedException for errors due to the language server having terminated.
+        """
+        self.cause = cause
+        super().__init__(message)
+
+    def __str__(self) -> str:
+        """
+        Returns a string representation of the exception.
+        """
+        s = super().__str__()
+        if self.cause:
+            if "\n" in s:
+                s += "\n"
+            else:
+                s += " "
+            s += f"(caused by {self.cause})"
+        return s

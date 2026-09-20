@@ -1,78 +1,111 @@
-# Photo Mixer - Justfile for common tasks
+# PySuite — monorepo Justfile (run from repository root)
 
 # Variables
 venv_name := "venv"
-venv_pip := "./{{venv_name}}/bin/pip"
-venv_python := "./{{venv_name}}/bin/python"
+venv_pip := "./" + venv_name + "/bin/pip"
+venv_python := "./" + venv_name + "/bin/python"
 
 
-# Default recipe - show available commands
+# Default recipe — show available commands
 default:
     @just --list --unsorted
 
-# Create virtual environment
+# ── Shared root venv (optional; PyCore & PhotoMixer also have their own) ──────
+
+# Create virtual environment at repo root
 setup-venv:
-    @printf "\033[36mCreating virtual environment...\033[0m\n"
+    @printf "\033[36mCreating virtual environment at repo root...\033[0m\n"
     python3 -m venv {{venv_name}}
     @printf "\033[32m✓ Virtual environment created in ./{{venv_name}}\033[0m\n"
     @echo ""
-    @printf "\033[33mActivate the virtual environment with:\033[0m\n"
-    @printf "\033[1m\033[36m    source {{venv_name}}/bin/activate\033[0m\n"
-    @echo ""
-    @printf "\033[33mDeactivate the virtual environment with:\033[0m\n"
-    @printf "\033[1m\033[36mdeactivate\033[0m\n"
-    @echo ""
+    @printf "\033[33mActivate with:\033[0m source {{venv_name}}/bin/activate\n"
 
-# Install dependencies/packages
+# Install root requirements.txt (PyCore deps mirrored at root)
 install-packages:
-    @printf "\033[36mInstalling dependencies/packages...\033[0m\n"
-    ./{{venv_name}}/bin/pip install --upgrade pip
-    ./{{venv_name}}/bin/pip install -r requirements.txt
-    @printf "\033[32m✓ Dependencies/packages installed\033[0m\n"
-    @echo ""
+    @printf "\033[36mInstalling root dependencies...\033[0m\n"
+    {{venv_pip}} install --upgrade pip
+    {{venv_pip}} install -r requirements.txt
+    @printf "\033[32m✓ Dependencies installed from requirements.txt\033[0m\n"
 
-
-# Clean virtual environment
+# Remove root virtual environment
 clean:
-    @printf "\033[33mRemoving virtual environment...\033[0m\n"
+    @printf "\033[33mRemoving root virtual environment...\033[0m\n"
     rm -rf {{venv_name}}
     @printf "\033[32m✓ Virtual environment removed\033[0m\n"
-    @echo ""
 
-# Install Awake dependencies
+# ── PyCore (document converter, time utils, office, exceptions) ───────────────
+
+# Run any PyCore Justfile recipe — e.g. `just pycore list`
+pycore *ARGS:
+    just --justfile PyCore/Justfile {{ARGS}}
+
+# ── PhotoMixer (image blending) ───────────────────────────────────────────────
+
+# Run any PhotoMixer Justfile recipe — e.g. `just photomixer run bg.jpg fg.jpg`
+photomixer *ARGS:
+    just --justfile PhotoMixer/Justfile {{ARGS}}
+
+# ── PyPatterns (design pattern examples) ──────────────────────────────────────
+
+# Run any PyPatterns Justfile recipe — e.g. `just pypatterns singleton`
+pypatterns *ARGS:
+    just --justfile PyPatterns/Justfile {{ARGS}}
+
+# ── Awake (macOS menubar sleep prevention) ────────────────────────────────────
+
+# Install Awake dependencies into root venv
 install-awake:
     @printf "\033[36mInstalling Awake dependencies...\033[0m\n"
-    ./{{venv_name}}/bin/pip install --upgrade pip
-    ./{{venv_name}}/bin/pip install -r awake/requirements.txt
+    {{venv_pip}} install --upgrade pip
+    {{venv_pip}} install -r Awake/requirements.txt
     @printf "\033[32m✓ Awake dependencies installed\033[0m\n"
-    @echo ""
 
 # Run Awake menubar app
 run-awake:
     @printf "\033[36mStarting Awake menubar app...\033[0m\n"
-    ./{{venv_name}}/bin/python awake/menubar.py
+    {{venv_python}} Awake/menubar.py
 
-# Build Awake app bundle
+# Build Awake.app bundle
 build-awake:
     @printf "\033[36mBuilding Awake.app...\033[0m\n"
-    cd awake && ./build.sh
-    @printf "\033[32m✓ Build complete! Check awake/Awake.app\033[0m\n"
+    cd Awake && ./build.sh
+    @printf "\033[32m✓ Build complete! Check Awake/Awake.app\033[0m\n"
 
-# Build Awake app with PyInstaller (requires: pip install pyinstaller)
+# Build Awake.app with PyInstaller (requires: pip install pyinstaller)
 build-awake-pyinstaller:
     @printf "\033[36mBuilding Awake.app with PyInstaller...\033[0m\n"
-    ./{{venv_name}}/bin/pyinstaller awake/awake.spec
+    {{venv_python}} -m PyInstaller Awake/awake.spec
     @printf "\033[32m✓ Build complete! Check dist/Awake.app\033[0m\n"
 
 # Show help
 help:
-    @printf "\033[1m\033[34mAvailable commands:\033[0m\n"
+    @printf "\033[1m\033[34mPySuite commands (run from repo root):\033[0m\n"
     @echo ""
-    @printf "\033[36m  just setup-venv\033[0m           - Create venv\n"
-    @printf "\033[36m  just install-packages\033[0m     - Install dependencies/packages\n"
-    @printf "\033[36m  just install-awake\033[0m        - Install Awake dependencies\n"
-    @printf "\033[36m  just run-awake\033[0m            - Run Awake menubar app\n"
-    @printf "\033[36m  just build-awake\033[0m          - Build Awake.app bundle\n"
-    @printf "\033[36m  just clean\033[0m                - Remove virtual environment\n"
-    @printf "\033[36m  just help\033[0m                 - Show this help\n"
+    @printf "\033[33mShared venv:\033[0m\n"
+    @printf "\033[36m  just setup-venv\033[0m              - Create root venv/\n"
+    @printf "\033[36m  just install-packages\033[0m        - Install root requirements.txt\n"
+    @printf "\033[36m  just clean\033[0m                   - Remove root venv/\n"
+    @echo ""
+    @printf "\033[33mPyCore\033[0m (or \033[36mcd PyCore\033[0m and use its Justfile):\n"
+    @printf "\033[36m  just pycore setup-venv\033[0m        - PyCore-local venv\n"
+    @printf "\033[36m  just pycore list\033[0m              - Document conversion formats\n"
+    @printf "\033[36m  just pycore convert -i FILE pdf\033[0m - Convert a document\n"
+    @printf "\033[36m  just pycore office --help\033[0m    - Office/Excel CLI\n"
+    @printf "\033[36m  just pycore time-demo\033[0m         - UTC/TAI demo\n"
+    @echo ""
+    @printf "\033[33mPhotoMixer\033[0m (or \033[36mcd PhotoMixer\033[0m):\n"
+    @printf "\033[36m  just photomixer setup\033[0m         - PhotoMixer venv + deps\n"
+    @printf "\033[36m  just photomixer run BG FG\033[0m     - Blend two images\n"
+    @echo ""
+    @printf "\033[33mPyPatterns\033[0m (or \033[36mcd PyPatterns\033[0m):\n"
+    @printf "\033[36m  just pypatterns singleton\033[0m     - Run Singleton demo\n"
+    @printf "\033[36m  just pypatterns list\033[0m          - List patterns\n"
+    @echo ""
+    @printf "\033[33mAwake\033[0m (macOS menubar app):\n"
+    @printf "\033[36m  just install-awake\033[0m           - Awake deps into root venv\n"
+    @printf "\033[36m  just run-awake\033[0m               - Run menubar app\n"
+    @printf "\033[36m  just build-awake\033[0m             - Build Awake.app\n"
+    @echo ""
+    @printf "\033[33mPyCademy\033[0m — no Justfile; run scripts directly:\n"
+    @printf "  cd PyCademy && python acronym.py\n"
     @echo ""

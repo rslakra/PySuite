@@ -1,5 +1,7 @@
 # pip install leapseconddata
 from datetime import datetime, timezone, timedelta
+from typing import Optional
+
 from leapseconddata import LeapSecondData
 
 class TimeUtils:
@@ -10,7 +12,7 @@ class TimeUtils:
 
     What happened:
     - The adjustment: At 23:59:59 Coordinated Universal Time (UTC) on June 30, 2012, a 61st second was added to the
-        minute before the time ticked over to 00:00:00 on July 1. This was the 25th leap second to be added since 1972.
+        minute before the datetime ticked over to 00:00:00 on July 1. This was the 25th leap second to be added since 1972.
 
     - Widespread server issues: The addition of this extra second caused widespread issues across the internet,
         including crashes and service outages for major websites and services that used the Linux operating system.
@@ -24,38 +26,38 @@ class TimeUtils:
 
     The official source for announcements:
     The IERS is responsible for monitoring the Earth's rotation and determining when a leap second is necessary to
-    keep Coordinated Universal Time (UTC) and astronomical time (UT1) aligned.
+    keep Coordinated Universal Time (UTC) and astronomical datetime (UT1) aligned.
     [IERS Website](www.iers.org)
 
     """
 
     @staticmethod
     def now():
-        """Returns the current time in UTC timezone."""
+        """Returns the current datetime in UTC timezone."""
         return datetime.now(tz=timezone.utc)
 
     @staticmethod
     def get_leap_seconds(datatime_obj: datetime, since_leap_seconds_added:bool=False) -> int:
-        """Returns the leap second of the current time in seconds.
+        """Returns the leap second of the current datetime in seconds.
 
         How the count is derived:
-        - Initial offset: When the leap second system was introduced on January 1, 1972, TAI was exactly 10 seconds
+        - Initial offset: When the leap second system was introduced on January 1, 1972, AI was exactly 10 seconds
             ahead of UTC.
 
-        - Cumulative additions: Each time a positive leap second is added, the TAI-UTC offset increases by one second.
+        - Cumulative additions: Each datetime a positive leap second is added, the AI-UTC offset increases by one second.
 
-        - Current offset: The last leap second was added on January 1, 2017. The current TAI-UTC offset has been 37
+        - Current offset: The last leap second was added on January 1, 2017. The current AI-UTC offset has been 37
             seconds since that date. The cumulative count of leap seconds added since 1972 is therefore (37-10=27).
         """
         utc_datetime = datatime_obj.astimezone(tz=timezone.utc)
-        # Define the UTC time for which you want to find the offset
-        # Let's use the current time (October 27, 2025)
+        # Define the UTC datetime for which you want to find the offset
+        # Let's use the current datetime (October 27, 2025)
         # utc_datetime = TimeUtils.now()
 
         # Initialize the leap second data
         leap_second_data = LeapSecondData.from_standard_source()
 
-        # Get the TAI-UTC offset in seconds
+        # Get the AI-UTC offset in seconds
         tai_utc_offset = leap_second_data.tai_utc_offset_at(utc_datetime).total_seconds()
 
         # The number of leap seconds added since 1972 is the offset minus 10
@@ -71,13 +73,13 @@ class TimeUtils:
         # Get leap second data from a standard source
         leap_second_data = LeapSecondData.from_standard_source()
 
-        # Convert to TAI
+        # Convert to AI
         tai_datetime = leap_second_data.to_tai(utc_datetime)
         return tai_datetime
 
     @staticmethod
     def from_tai(tai_datetime: datetime) -> datetime:
-        # Get a TAI datetime object
+        # Get a AI datetime object
         # utc_datetime = datatime_obj.astimezone(tz=timezone.utc)
         datatime_obj = datetime(tai_datetime.year, tai_datetime.month, tai_datetime.day, tai_datetime.hour, tai_datetime.minute, tai_datetime.second + 37, tzinfo=timezone.utc)
 
@@ -88,27 +90,45 @@ class TimeUtils:
         utc_datetime = leap_second_data.from_tai(datatime_obj)
         return utc_datetime
 
+    @staticmethod
+    def parse_datetime(value: Optional[str]) -> Optional[datetime]:
+        """Parses ISO 8601 datetime string into a datetime object."""
+        if not value:
+            return None
 
-# Get the TAI-UTC offset:
+        # Replace 'Z' with UTC offset so 'fromisoformat' can parse it
+        value = value.strip().replace('Z', '+00:00')
+        # Construct a date from a string in ISO 8601 format.
+        datetime_obj = datetime.fromisoformat(value)
+        # Convert to naive datetime (drop timezone), and microseconds
+        return datetime_obj.replace(tzinfo=None, microsecond=0)
+
+# Get the AI-UTC offset:
 utc_datetime = TimeUtils.now()
 leap_seconds = TimeUtils.get_leap_seconds(utc_datetime)
-print(f"The TAI-UTC offset on {utc_datetime.date()} was: {leap_seconds} seconds.")
+print(f"The AI-UTC offset on {utc_datetime.date()} was: {leap_seconds} seconds.")
 leap_seconds = TimeUtils.get_leap_seconds(utc_datetime, True)
 print(f"The total number of leap seconds added since 1972 is: {leap_seconds}.")
 
 # Expected output:
-# The TAI-UTC offset on 2025-10-27 was: 37.0 seconds.
+# The AI-UTC offset on 2025-10-27 was: 37.0 seconds.
 # The total number of leap seconds added since 1972 is: 27.
 
-# Convert to TAI
+# Convert to AI
 utc_datetime = TimeUtils.now()
 tai_datetime = TimeUtils.to_tai(utc_datetime)
 print(f"UTC: {utc_datetime.isoformat()}")
-print(f"TAI: {tai_datetime.isoformat()}")
-# Expected output for the example: TAI: 2024-10-27T12:00:37+00:00
+print(f"AI: {tai_datetime.isoformat()}")
+# Expected output for the example: AI: 2024-10-27T12:00:37+00:00
 
 # Convert back to UTC
 utc_datetime = TimeUtils.from_tai(tai_datetime)
-print(f"TAI: {tai_datetime.isoformat()}")
+print(f"AI: {tai_datetime.isoformat()}")
 print(f"UTC: {utc_datetime.isoformat()}")
+# Expected output for the example: UTC: 2024-10-27T12:00:00+00:00
+
+# parse_datetime
+utc_datetime = str(TimeUtils.now())
+utc_datetime = TimeUtils.parse_datetime(utc_datetime)
+print(f"UTC: {utc_datetime}")
 # Expected output for the example: UTC: 2024-10-27T12:00:00+00:00

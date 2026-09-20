@@ -1,19 +1,62 @@
 # PySuite
 
-A Python utility suite with time handling utilities and learning examples.
+A Python monorepo of utilities, learning exercises, and small tools — document conversion, time handling, design patterns, image mixing, and macOS helpers.
 
-## Overview
+## 🚀 Quick Start
 
-PySuite is a collection of Python utilities and learning examples, featuring:
-- **Document Converter**: Convert between markdown, Word, and PDF formats
-- **Time Utilities**: Advanced time handling with leap second support
-- **Learning Examples**: Various Python code samples and exercises
-- **Task Automation**: Justfile-based commands for common development tasks
+Get the shared virtual environment ready from the repository root, then open any child project.
 
-## Prerequisites
+```bash
+git clone https://github.com/rslakra/PySuite
+cd PySuite
 
-- Python 3.12 or higher
-- [Just](https://github.com/casey/just) (command runner)
+# PyCore (recommended — self-contained)
+cd PyCore && just setup-venv && source venv/bin/activate && just install-packages
+
+# Or use the root Justfile for Awake / shared venv
+cd .. && just setup-venv && source venv/bin/activate && just install-packages
+```
+
+For project-specific setup and usage, see the README in each subdirectory below.
+
+### Usage
+
+Run a child project after activating the venv:
+
+```bash
+# Document conversion (PyCore)
+cd PyCore && python cli.py --list
+
+# Photo mixing (PhotoMixer)
+cd PhotoMixer && just run bg.jpg fg.jpg
+
+# Awake menubar app
+just run-awake
+```
+
+### Output
+
+Each project writes artifacts to its own directory (converted documents beside the input file, mixed images under `PhotoMixer/images/mixed/`, etc.). See the child README for details.
+
+## ✨ Features
+
+- **PyCore** — CLI document converter (markdown, Word, PDF) and UTC/TAI time utilities with leap-second support
+- **PyCademy** — Standalone Python learning scripts and small exercises
+- **PyPatterns** — Reference implementations of common design patterns
+- **PhotoMixer** — Blend two images with configurable opacity and blend modes
+- **Awake** — macOS menubar app that prevents system sleep
+
+## 📋 Prerequisites & Dependencies
+
+- Python `3.12+`
+- [Just](https://github.com/casey/just) command runner (optional but recommended)
+
+| Source | Purpose |
+| ------ | ------- |
+| [`PyCore/requirements.txt`](PyCore/requirements.txt) | PyCore runtime packages (installed via `just install-packages` in `PyCore/`) |
+| [`requirements.txt`](requirements.txt) | Same deps at repo root (for root Justfile) |
+| [`PhotoMixer/requirements.txt`](PhotoMixer/requirements.txt) | Pillow and deps for PhotoMixer |
+| [`Awake/requirements.txt`](Awake/requirements.txt) | rumps and deps for the menubar app |
 
 ### Installing Just
 
@@ -28,207 +71,130 @@ curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | bash -s -
 cargo install just
 ```
 
-## Quick Start
+## ⚙️ Build & Configuration
 
-### 1. Setup Virtual Environment
+### Build
 
 ```bash
 just setup-venv
-```
-
-This creates a virtual environment in the `venv` directory.
-
-### 2. Activate Virtual Environment
-
-```bash
 source venv/bin/activate
+just install-packages        # PyCore / root deps
+just install-awake             # Awake-only deps (optional)
 ```
 
-### 3. Install Dependencies
+PhotoMixer has its own Justfile — see [PhotoMixer/README.md](PhotoMixer/README.md).
 
-```bash
-just install-packages
-```
+### Just commands
 
-This installs all required packages from `requirements.txt`.
+Run from the **repository root**:
 
-## Available Commands
+| Command | Description |
+| ------- | ----------- |
+| `just setup-venv` | Create root `venv/` |
+| `just install-packages` | Install root `requirements.txt` |
+| `just pycore ARGS...` | Delegate to [PyCore/Justfile](PyCore/Justfile) |
+| `just photomixer ARGS...` | Delegate to [PhotoMixer/Justfile](PhotoMixer/Justfile) |
+| `just pypatterns ARGS...` | Delegate to [PyPatterns/Justfile](PyPatterns/Justfile) |
+| `just install-awake` | Install Awake deps into root venv |
+| `just run-awake` | Run Awake menubar app |
+| `just build-awake` | Build `Awake.app` bundle |
+| `just clean` | Remove root virtual environment |
+| `just help` | Show all commands by project |
 
-The project uses [Just](https://github.com/casey/just) for task automation. Run `just help` to see all available commands:
+PyCore, PhotoMixer, and PyPatterns each have project-specific commands — see their READMEs or run `just pycore help`, `just photomixer help`, `just pypatterns help`.
 
-- `just setup-venv` - Create virtual environment
-- `just install-packages` - Install dependencies/packages
-- `just clean` - Remove virtual environment
-- `just help` - Show help message
-
-## Project Structure
+## 📁 Project Layout
 
 ```
 PySuite/
-├── core/                 # Core utilities
-│   ├── converter/       # Document format converters
-│   │   ├── abstract.py
-│   │   ├── registry.py
-│   │   ├── word.py
-│   │   └── pdf.py
-│   └── time/            # Time utilities with leap second support
-│       └── time.py
-├── learning/            # Learning examples and exercises
-│   ├── acronym.py
-│   ├── keyGenerator.py
-│   ├── lists.py
-│   ├── story.py
-│   └── underscores.py
-├── tests/               # Test files
-├── cli.py               # CLI entry point
-├── requirements.txt     # Python dependencies
-├── Justfile            # Task automation commands
-└── README.md           # This file
+├── PyCore/           # Document converter CLI and time utilities
+├── PyCademy/         # Learning scripts and exercises
+├── PyPatterns/       # Design pattern examples
+├── PhotoMixer/       # Image blending tool
+├── Awake/            # macOS sleep-prevention menubar app
+├── tests/            # Shared test package
+├── requirements.txt  # PyCore dependencies
+├── Justfile          # Root task automation
+└── README.md         ← you are here
 ```
 
-## Core Features
+| Path | Description |
+| ---- | ----------- |
+| [PyCore/](PyCore/) | Core libraries and `cli.py` entry point |
+| [PyCademy/](PyCademy/) | Runnable Python learning examples |
+| [PyPatterns/](PyPatterns/) | Creational, behavioral, and structural patterns |
+| [PhotoMixer/](PhotoMixer/) | CLI photo compositing |
+| [Awake/](Awake/) | macOS menubar utility |
 
-### Document Converter
+## 🏗️ Architecture
 
-Convert documents between markdown, Word (`.docx`), and PDF using `cli.py`.
+```mermaid
+flowchart TB
+  Root["PySuite (root)"]
+  Root --> PyCore
+  Root --> PyCademy
+  Root --> PyPatterns
+  Root --> PhotoMixer
+  Root --> Awake
 
-#### Supported conversions
+  PyCore --> CLI["cli.py"]
+  PyCore --> Conv["core/converter/"]
+  PyCore --> Time["core/datetime/"]
+```
 
-| From | To |
-|------|-----|
-| `.md` / `.markdown` | `.docx` |
-| `.docx` | `.md` / `.markdown` / `.pdf` |
-| `.pdf` | `.docx` |
+Child projects are independent Python packages or scripts. They share the root `venv/` when you use the root Justfile; PhotoMixer and Awake can also manage their own environments.
 
-#### CLI usage
-
-Show help:
+## 🧪 Testing
 
 ```bash
-python cli.py -h
-```
-
-List supported conversions:
-
-```bash
-python cli.py --list
-# or
-python cli.py list
-```
-
-Convert with explicit input and output paths:
-
-```bash
-python cli.py -i README.md -o README.docx
-python cli.py --input report.pdf --output report.docx
-python cli.py README.md README.docx
-```
-
-Convert with input only (output is created next to the input file):
-
-```bash
-python cli.py -i README.md
-# creates README.docx in the same folder as README.md
-
-python cli.py README.md
-# same behavior using a positional input path
-```
-
-When only the input is provided, the output extension is chosen automatically:
-
-| Input | Default output |
-|-------|----------------|
-| `.md` / `.markdown` | `.docx` |
-| `.pdf` | `.docx` |
-| `.docx` | `.md` |
-
-Specify a target format with `--to` when the default is not what you want:
-
-```bash
-python cli.py -i notes.docx --to pdf
-# creates notes.pdf next to notes.docx
-```
-
-#### Notes
-
-- `docx -> pdf` uses `docx2pdf`, which requires **Microsoft Word** on macOS or Windows.
-- PDF and markdown conversions do not require Word.
-
-### Time Utilities
-
-The `core.time.time` module provides utilities for handling time with leap second support:
-
-```python
-from core.time.time import TimeUtils
-from datetime import datetime
-
-# Get current UTC time
-utc_time = TimeUtils.now()
-
-# Get leap seconds
-leap_seconds = TimeUtils.get_leap_seconds(utc_time)
-
-# Convert UTC to TAI (International Atomic Time)
-tai_time = TimeUtils.to_tai(utc_time)
-
-# Convert TAI back to UTC
-utc_time = TimeUtils.from_tai(tai_time)
-```
-
-#### Features:
-- **Leap Second Handling**: Properly accounts for leap seconds added since 1972
-- **TAI Conversion**: Convert between UTC and TAI (International Atomic Time)
-- **Leap Second Data**: Uses the `leapseconddata` library for accurate leap second information
-
-## Dependencies
-
-- `leapseconddata` - Provides accurate leap second data
-- `python-docx` - Word document read/write
-- `markdown` - Markdown parsing
-- `pdf2docx` - PDF to Word conversion
-- `docx2pdf` - Word to PDF conversion (requires Microsoft Word on macOS/Windows)
-
-See `requirements.txt` for the complete list of dependencies.
-
-## Development
-
-### Running the Project
-
-```bash
-# Activate virtual environment
 source venv/bin/activate
-
-# Show CLI help
-python cli.py -h
-
-# List supported document conversions
-python cli.py --list
-
-# Convert a markdown file to Word (output created beside input)
-python cli.py -i README.md
+python -m pytest tests/    # when tests are present
 ```
 
-### Cleaning Up
+Individual projects may include local test scripts (e.g. under `Awake/test/`).
 
-To remove the virtual environment:
+## 🛠️ Troubleshooting
 
-```bash
-just clean
-```
+**`just: command not found`**
 
-## Notes
+- **Cause:** Just is not installed or not on your `PATH`
+- **Fix:** Install Just (see **📋 Prerequisites & Dependencies**) or run equivalent `python3 -m venv` / `pip install` commands manually
 
-- The virtual environment is created in the `venv/` directory (gitignored)
-- All commands use colorful output for better readability
-- The project uses Python 3.12+ features
+**Import errors when running PyCore**
 
-# Author
-- Rohtash Lakra
+- **Cause:** Dependencies not installed or venv not activated
+- **Fix:** `source venv/bin/activate` then `just install-packages` from the repo root
 
-## License
+| Issue | Fix |
+| ----- | --- |
+| `docx -> pdf` fails | Requires Microsoft Word on macOS or Windows (`docx2pdf`) |
+| Awake icon not visible | Build and run the `.app` bundle — see [Awake/README.md](Awake/README.md) |
+
+## 📚 References
+
+### In this repository
+
+| README / Link | Description |
+| ------------- | ----------- |
+| [PyCore](PyCore/README.md) | Document converter and time utilities |
+| [PyCademy](PyCademy/README.md) | Learning examples |
+| [PyPatterns](PyPatterns/README.md) | Design pattern implementations |
+| [PyTools](PyTools/README.md) | Migration index — where monolith tools moved |
+| [PhotoMixer](PhotoMixer/README.md) | Image blending CLI |
+| [Awake](Awake/README.md) | macOS menubar sleep prevention |
+| [README-TEMPLATE.md](README-TEMPLATE.md) | README structure template |
+
+### External Documentation
+
+| Link | Description |
+| ---- | ----------- |
+| [Just](https://github.com/casey/just) | Command runner used by root Justfile |
+| [python-docx](https://python-docx.readthedocs.io/) | Word document library used by PyCore |
+
+## 📄 License
 
 [Add your license here]
 
-## Contributing
+## 👤 Author
 
-[Add contribution guidelines here]
+- **Rohtash Lakra** — [@rslakra](https://github.com/rslakra)

@@ -1,0 +1,88 @@
+# PyCore — Justfile (run from PyCore/)
+
+# Variables
+venv_name := "venv"
+venv_pip := "./" + venv_name + "/bin/pip"
+venv_python := "./" + venv_name + "/bin/python"
+
+
+# Default recipe — show available commands
+default:
+    @just --list --unsorted
+
+# Create virtual environment
+setup-venv:
+    @printf "\033[36mCreating PyCore virtual environment...\033[0m\n"
+    python3 -m venv {{venv_name}}
+    @printf "\033[32m✓ Virtual environment created in ./{{venv_name}}\033[0m\n"
+    @echo ""
+    @printf "\033[33mActivate with:\033[0m source {{venv_name}}/bin/activate\n"
+
+# Install PyCore dependencies from requirements.txt
+install-packages:
+    @printf "\033[36mInstalling PyCore dependencies...\033[0m\n"
+    {{venv_pip}} install --upgrade pip
+    {{venv_pip}} install -r requirements.txt
+    @printf "\033[32m✓ Dependencies installed from requirements.txt\033[0m\n"
+
+# Remove virtual environment
+clean:
+    @printf "\033[33mRemoving PyCore virtual environment...\033[0m\n"
+    rm -rf {{venv_name}}
+    @printf "\033[32m✓ Virtual environment removed\033[0m\n"
+
+# ── Document converter (cli.py) ───────────────────────────────────────────────
+
+# List supported format pairs (md, docx, pdf)
+list:
+    {{venv_python}} cli.py --list
+
+# Pass any cli.py flags — e.g. just convert -i FILE pdf
+convert *ARGS:
+    {{venv_python}} cli.py {{ARGS}}
+
+# Shorthand — just convert-to INPUT FORMAT (e.g. just convert-to notes.docx pdf)
+convert-to input format:
+    {{venv_python}} cli.py -i "{{input}}" "{{format}}"
+
+# Show cli.py help
+cli-help:
+    {{venv_python}} cli.py -h
+
+# ── Office tooling (office/main.py) ───────────────────────────────────────────
+
+# Excel export & agent roster — e.g. `just office export book.xlsx`
+office *ARGS:
+    {{venv_python}} office/main.py {{ARGS}}
+
+# ── Core library demos ────────────────────────────────────────────────────────
+
+# UTC/TAI time utilities demo (core/datetime/time.py)
+time-demo:
+    {{venv_python}} -m core.datetime.time
+
+# Show help
+help:
+    @printf "\033[1m\033[34mPyCore commands (run from PyCore/):\033[0m\n"
+    @echo ""
+    @printf "\033[33mEnvironment:\033[0m\n"
+    @printf "\033[36m  just setup-venv\033[0m              - Create venv/\n"
+    @printf "\033[36m  just install-packages\033[0m        - Install requirements.txt\n"
+    @printf "\033[36m  just clean\033[0m                   - Remove venv/\n"
+    @echo ""
+    @printf "\033[33mDocument converter:\033[0m\n"
+    @printf "\033[36m  just list\033[0m                    - Supported conversions\n"
+    @printf "\033[36m  just convert -i FILE pdf\033[0m           - Convert to a format\n"
+    @printf "\033[36m  just convert -i FILE -f pdf\033[0m         - Same, with --format flag\n"
+    @printf "\033[36m  just convert -i FILE --out OUT\033[0m    - Explicit output path\n"
+    @printf "\033[36m  just convert-to FILE md\033[0m           - Shorthand: input + format\n"
+    @printf "\033[36m  just cli-help\033[0m                - cli.py help\n"
+    @echo ""
+    @printf "\033[33mOffice tooling:\033[0m\n"
+    @printf "\033[36m  just office ARGS...\033[0m          - office/main.py (export, roster, …)\n"
+    @echo ""
+    @printf "\033[33mCore library:\033[0m\n"
+    @printf "\033[36m  just time-demo\033[0m               - UTC/TAI leap-second demo\n"
+    @echo ""
+    @printf "\033[33mFrom repo root:\033[0m \033[36mjust pycore <command>\033[0m\n"
+    @echo ""
