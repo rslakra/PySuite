@@ -1,0 +1,46 @@
+# PyCademy — Justfile (run from PyCademy/)
+
+venv_name := "venv"
+venv_pip := "./" + venv_name + "/bin/pip"
+venv_python := "./" + venv_name + "/bin/python"
+
+
+default:
+    @just --list --unsorted
+
+setup-venv:
+    python3 -m venv {{venv_name}}
+    @printf "\033[32m✓ Virtual environment created in ./{{venv_name}}\033[0m\n"
+
+install-packages:
+    {{venv_pip}} install --upgrade pip
+    {{venv_pip}} install -e ".[network]"
+    @printf "\033[32m✓ Installed pycademy (src layout)\033[0m\n"
+
+clean:
+    rm -rf {{venv_name}}
+
+run module:
+    {{venv_python}} -m pycademy.{{module}}
+
+acronym:
+    {{venv_python}} -m pycademy.acronym
+
+lists:
+    {{venv_python}} -m pycademy.lists
+
+generator:
+    {{venv_python}} -m pycademy.generator
+
+story:
+    {{venv_python}} -m pycademy.story
+
+underscores:
+    {{venv_python}} -m pycademy.underscores
+
+help:
+    @printf "\033[1mPyCademy commands:\033[0m\n"
+    @echo "  just install-packages   pip install -e .[network]"
+    @echo "  just run acronym        python -m pycademy.acronym"
+    @echo "  just run lists          python -m pycademy.lists"
+    @echo "  just run MODULE         python -m pycademy.MODULE"

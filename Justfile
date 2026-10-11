@@ -45,6 +45,18 @@ pycore *ARGS:
 photomixer *ARGS:
     just --justfile PhotoMixer/Justfile {{ARGS}}
 
+# ── PyCademy (learning scripts) ───────────────────────────────────────────────
+
+# Run any PyCademy Justfile recipe — e.g. `just pycademy acronym`
+pycademy *ARGS:
+    just --justfile PyCademy/Justfile {{ARGS}}
+
+# ── PyTools (migration index) ─────────────────────────────────────────────────
+
+# Run any PyTools Justfile recipe — e.g. `just pytools index`
+pytools *ARGS:
+    just --justfile PyTools/Justfile {{ARGS}}
+
 # ── PyPatterns (design pattern examples) ──────────────────────────────────────
 
 # Run any PyPatterns Justfile recipe — e.g. `just pypatterns singleton`
@@ -106,6 +118,10 @@ help:
     @printf "\033[36m  just run-awake\033[0m               - Run menubar app\n"
     @printf "\033[36m  just build-awake\033[0m             - Build Awake.app\n"
     @echo ""
-    @printf "\033[33mPyCademy\033[0m — no Justfile; run scripts directly:\n"
-    @printf "  cd PyCademy && python acronym.py\n"
+    @printf "\033[33mPyCademy\033[0m (or \033[36mcd PyCademy\033[0m):\n"
+    @printf "\033[36m  just pycademy install-packages\033[0m  - Editable install\n"
+    @printf "\033[36m  just pycademy acronym\033[0m            - Run acronym demo\n"
+    @echo ""
+    @printf "\033[33mPyTools\033[0m (migration index):\n"
+    @printf "\033[36m  just pytools index\033[0m              - Print legacy path map\n"
     @echo ""

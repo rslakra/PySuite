@@ -1,36 +1,36 @@
 # PyCademy
 
-Standalone Python learning scripts and small exercises — string helpers, list comprehensions, format-string parsing, and a Twisted TCP chat server.
+Standalone Python learning scripts and small exercises — string helpers, list comprehensions, format-string parsing, Jupyter notebooks, and a Twisted TCP chat server.
 
 ## 🚀 Quick Start
 
-Most scripts run with the system Python or the shared PySuite virtual environment. No extra packages are required except for `TCPServer.py`.
+Install the package once, then run modules with `-m`:
 
 ```bash
-cd PySuite
-just setup-venv          # optional
+cd PyCademy
+just install-packages
 source venv/bin/activate
 
-cd PyCademy
-python acronym.py
-python lists.py
-python keyGenerator.py
+python -m pycademy.acronym
+python -m pycademy.lists
+python -m pycademy.generator
 ```
 
-For the TCP server example, install Twisted first — see **📋 Prerequisites & Dependencies** below.
+For the TCP server, Twisted is included via `requirements.txt` — see **📋 Prerequisites & Dependencies** below.
 
 ### Usage
 
-Run any script directly:
-
 ```bash
-python acronym.py          # interactive: build an acronym from a phrase
-python underscores.py      # interactive: replace spaces with underscores
-python lists.py            # list multiplication demo
-python keyGenerator.py     # extract {placeholders} from format strings
-python story.py            # interactive mad-libs style story builder
-python main.py             # minimal PyCharm starter template
+just acronym                         # or: python -m pycademy.acronym
+python -m pycademy.underscores       # interactive: replace spaces with underscores
+python -m pycademy.lists             # list multiplication demo
+python -m pycademy.generator         # extract {placeholders} from format strings
+python -m pycademy.story             # interactive mad-libs style story builder
+python -m pycademy.main              # minimal PyCharm starter template
+jupyter notebook notebooks/Jupyter01Core.ipynb
 ```
+
+From the repo root: `just pycademy acronym`
 
 ### Output
 
@@ -43,42 +43,43 @@ PDF
 
 ## ✨ Features
 
-- **acronym.py** — Build an uppercase acronym from the first letter of each word
-- **underscores.py** — Replace spaces with underscores in a phrase
-- **lists.py** — Compare list comprehensions vs. imperative loops for scaling numbers
-- **keyGenerator.py** — Parse `{named}` placeholders from Python format strings
-- **story.py** — Collect user input and fill a story template from cue keys
-- **TCPServer.py** — Multi-client TCP chat server using Twisted (legacy Python 2 syntax)
-- **main.py** — Empty starter script for IDE debugging
+- **pycademy.acronym** — Build an uppercase acronym from the first letter of each word
+- **pycademy.underscores** — Replace spaces with underscores in a phrase
+- **pycademy.lists** — Compare list comprehensions vs. imperative loops for scaling numbers
+- **pycademy.generator** — Parse `{named}` placeholders from Python format strings
+- **pycademy.story** — Collect user input and fill a story template from cue keys
+- **pycademy.TCPServer** — Multi-client TCP chat server using Twisted (legacy Python 2 syntax)
+- **pycademy.main** — Empty starter script for IDE debugging
+- **notebooks/** — Notebook exercises (`Jupyter01Core.ipynb`)
 
 ## 📋 Prerequisites & Dependencies
 
 - Python `3.12+` (most scripts)
-- **Twisted** — only for `TCPServer.py` (`pip install twisted`)
+- **Twisted** — only for `TCPServer.py`
 
 | Source | Purpose |
 | ------ | ------- |
+| [`requirements.txt`](requirements.txt) | Editable install (`-e .`) plus Twisted for `TCPServer` |
 | [PySuite README](../README.md) | Optional shared `venv/` via root Justfile |
-| Script docstrings | Per-file behavior and examples |
 
-No `requirements.txt` lives in this directory; dependencies are minimal and script-specific.
+### Install
+
+```bash
+just install-packages    # pip install -e ".[network]"
+```
 
 ## ⚙️ Build & Configuration
 
 ### Build
 
 ```bash
-cd ..
-just setup-venv              # optional shared environment
-source venv/bin/activate
 cd PyCademy
+just install-packages
+source venv/bin/activate
+python -m pycademy.acronym
 ```
 
-Install Twisted only if you need the TCP server:
-
-```bash
-pip install twisted
-```
+Scripts live under **`src/pycademy/`**. After editable install, run with `python -m pycademy.<module>`.
 
 No environment variables or config files are required.
 
@@ -86,41 +87,49 @@ No environment variables or config files are required.
 
 ```
 PyCademy/
-├── acronym.py          # Acronym builder (interactive)
-├── underscores.py      # Space-to-underscore helper
-├── lists.py            # List comprehension vs loop
-├── keyGenerator.py     # Format-string key extraction
-├── story.py            # Template story with user picks
-├── TCPServer.py        # Twisted TCP chat server
-├── main.py             # IDE starter template
-└── README.md           ← you are here
+├── src/
+│   └── pycademy/
+│       ├── acronym.py
+│       ├── underscores.py
+│       ├── lists.py
+│       ├── generator.py
+│       ├── story.py
+│       ├── TCPServer.py
+│       └── main.py
+├── notebooks/
+│   ├── Jupyter01Core.ipynb
+│   └── README.md
+├── pyproject.toml
+├── requirements.txt      # -e . + twisted
+├── Justfile
+└── README.md             ← you are here
 ```
 
-| Script | Run | Notes |
+| Module | Run | Notes |
 | ------ | --- | ----- |
-| `acronym.py` | `python acronym.py` | stdin prompt |
-| `lists.py` | `python lists.py` | prints two equivalent results |
-| `keyGenerator.py` | `python keyGenerator.py` | includes doctest examples |
-| `TCPServer.py` | `python TCPServer.py` | requires Twisted; Python 2-era syntax |
+| `pycademy.acronym` | `python -m pycademy.acronym` | stdin prompt |
+| `pycademy.lists` | `python -m pycademy.lists` | prints two equivalent results |
+| `pycademy.generator` | `python -m pycademy.generator` | includes doctest examples |
+| `pycademy.TCPServer` | `python -m pycademy.TCPServer` | requires Twisted; Python 2-era syntax |
 
 ## 🏗️ Architecture
 
 ```mermaid
 flowchart TB
-  subgraph scripts ["Standalone scripts"]
-    A["acronym.py"]
-    U["underscores.py"]
-    L["lists.py"]
-    K["keyGenerator.py"]
-    S["story.py"]
+  subgraph scripts ["pycademy modules"]
+    A["acronym"]
+    U["underscores"]
+    L["lists"]
+    G["generator"]
+    S["story"]
   end
 
   subgraph network ["Network example"]
-    T["TCPServer.py"] --> Twisted["Twisted reactor"]
+    T["TCPServer"] --> Twisted["Twisted reactor"]
   end
 ```
 
-Each file is self-contained with a `if __name__ == "__main__"` block. There is no shared package layer — copy and adapt patterns into your own projects.
+Each module is self-contained with an `if __name__ == "__main__"` block (except `TCPServer`, which runs at import time).
 
 ### TCPServer protocol
 
@@ -136,8 +145,8 @@ telnet localhost 1601
 ## 🧪 Testing
 
 ```bash
-python keyGenerator.py     # runs embedded doctests when executed
-python lists.py              # verify printed output matches
+python -m pycademy.generator     # runs embedded doctests when executed
+python -m pycademy.lists       # verify printed output matches
 ```
 
 Manual checks for interactive scripts: run and enter sample input at the prompt.
@@ -152,7 +161,7 @@ Manual checks for interactive scripts: run and enter sample input at the prompt.
 **Twisted import error**
 
 - **Cause:** Twisted not installed
-- **Fix:** `pip install twisted`
+- **Fix:** `just install-packages` or `pip install -e ".[network]"`
 
 | Issue | Fix |
 | ----- | --- |
@@ -165,15 +174,16 @@ Manual checks for interactive scripts: run and enter sample input at the prompt.
 | README / Link | Description |
 | ------------- | ----------- |
 | [PySuite (root)](../README.md) | Monorepo index |
-| [PyCore](../PyCore/README.md) | Production utilities (converter, time) |
+| [PyCore](../PyCore/README.md) | Production utilities |
 | [PyPatterns](../PyPatterns/README.md) | Design pattern reference code |
+| [notebooks/README.md](notebooks/README.md) | Notebook exercises |
 
 ### External Documentation
 
 | Link | Description |
 | ---- | ----------- |
-| [Twisted](https://twisted.org/) | Event-driven networking engine used by `TCPServer.py` |
-| [Python format strings](https://docs.python.org/3/library/string.html#format-string-syntax) | Placeholder syntax used in `keyGenerator.py` / `story.py` |
+| [Twisted](https://twisted.org/) | Event-driven networking engine |
+| [Python format strings](https://docs.python.org/3/library/string.html#format-string-syntax) | Placeholder syntax in `generator.py` / `story.py` |
 
 ## 📄 License
 

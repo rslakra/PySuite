@@ -18,18 +18,24 @@ just convert -i README.md
 
 Learning scripts are in **PyCademy**; design patterns are in **PyPatterns**. See **📁 Where things moved** below.
 
+Install this package to use the programmatic migration index (`from pytools import PROJECT_INDEX`).
+
+```bash
+cd PyTools
+just install-packages
+just index
+```
+
 ### Usage
 
 Document converter (from **PyCore/**):
 
 ```bash
-python cli.py -h
-python cli.py --list
-python cli.py -i report.pdf --out report.docx
-python cli.py -i notes.docx pdf
-python cli.py -i notes.docx -f pdf
+python -m core.cli -h
+python -m core.cli --list
+python -m core.cli -i report.pdf --out report.docx
+python -m core.cli -i notes.docx pdf
 just convert -i README.md md
-just convert-to notes.docx pdf
 ```
 
 Time utilities demo:
@@ -43,8 +49,16 @@ Learning examples (from **PyCademy/**):
 
 ```bash
 cd PyCademy
-python acronym.py
-python lists.py
+just install-packages
+python -m pycademy.acronym
+python -m pycademy.lists
+```
+
+Migration index (from **PyTools/**):
+
+```bash
+python -c "from pytools import resolve_path; print(resolve_path('cli.py'))"
+just index
 ```
 
 Design patterns (from **PyPatterns/**):
@@ -65,26 +79,26 @@ Tools are grouped by project in the monorepo:
 
 | Area | Project | Examples |
 | ---- | ------- | -------- |
-| Document conversion | [PyCore](../PyCore/) | `cli.py`, markdown / Word / PDF |
+| Document conversion | [PyCore](../PyCore/) | `core.cli`, markdown / Word / PDF |
 | Time & leap seconds | [PyCore](../PyCore/) | `core/datetime/time.py`, `TimeUtils` |
 | HTTP exceptions, I/O | [PyCore](../PyCore/) | `core/exceptions/`, `core/io/` |
 | Office / Excel | [PyCore](../PyCore/) | `office/main.py` |
-| Learning scripts | [PyCademy](../PyCademy/) | `acronym.py`, `lists.py`, `story.py` |
+| Learning scripts | [PyCademy](../PyCademy/) | `pycademy.acronym`, `pycademy.lists`, … |
 | Design patterns | [PyPatterns](../PyPatterns/) | `creational/singleton.py` |
-| Image blending | [PhotoMixer](../PhotoMixer/) | `photo_mixer.py` |
+| Image blending | [PhotoMixer](../PhotoMixer/) | `photomixer.cli` |
+| Migration index | [PyTools](../PyTools/) | `pytools.index.PROJECT_INDEX` |
+| Shared tests | [PyTests](../PyTests/) | pytest package |
 | macOS menubar | [Awake](../Awake/) | sleep prevention app |
 
 ## 📋 Prerequisites & Dependencies
 
 - Python `3.12+`
 - [Just](https://github.com/casey/just) (optional — task runners in PyCore, PyPatterns, PhotoMixer, and at repo root)
-- **Microsoft Word** (macOS or Windows only) — required for `docx → pdf` in PyCore via `docx2pdf`
 
 | Source | Purpose |
 | ------ | ------- |
+| [`requirements.txt`](requirements.txt) | Editable install (`-e .`) for the migration index package |
 | [PyCore/requirements.txt](../PyCore/requirements.txt) | Converter, time, and office dependencies |
-| [PySuite README](../README.md) | Monorepo setup and root Justfile |
-| PyCademy / PyPatterns | Standard library only (except Twisted for `TCPServer.py`) |
 
 ### Installing Just
 
@@ -100,15 +114,17 @@ curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | bash -s -
 
 ### Build
 
-PyTools itself has no install step — open the project that matches what you need:
+PyTools is a lightweight index package. Install it for programmatic path lookup; run utilities from sibling projects:
 
 ```bash
+# PyTools index
+cd PyTools && just install-packages && just index
+
 # PyCore (recommended for utilities)
 cd PyCore && just setup-venv && source venv/bin/activate && just install-packages
-
-# Or root venv (optional, mirrors PyCore deps)
-cd .. && just setup-venv && source venv/bin/activate && just install-packages
 ```
+
+Code lives under **`src/pytools/`** (`index.py` with `PROJECT_INDEX` and `resolve_path()`).
 
 ### Document converter CLI flags (PyCore)
 
@@ -116,17 +132,9 @@ cd .. && just setup-venv && source venv/bin/activate && just install-packages
 | ----------- | ------- |
 | `-i` / `--input PATH` | Input file |
 | `FORMAT` (trailing) | Target format — e.g. `just convert -i file.docx pdf` |
-| `-f` / `--format FORMAT` | Explicit format when not using a trailing argument |
+| `-f` / `--format FORMAT` | Explicit format |
 | `--out PATH` | Explicit output file path |
 | `--list` | Supported conversion pairs |
-
-Default output when format is omitted:
-
-| Input | Default output |
-| ----- | -------------- |
-| `.md` / `.markdown` | `.docx` |
-| `.pdf` | `.docx` |
-| `.docx` | `.md` |
 
 ### Just commands (repo root)
 
@@ -137,40 +145,50 @@ Default output when format is omitted:
 | `just pycore time-demo` | UTC/TAI demo |
 | `just pypatterns singleton` | Singleton pattern demo |
 | `just photomixer run BG FG` | Blend two images |
+| `just pycademy acronym` | Run a learning script |
+| `just pytools index` | Print legacy → current path map |
 | `just help` | All projects |
+
+## 📁 Project Layout
+
+```
+PyTools/
+├── src/
+│   └── pytools/
+│       ├── __init__.py
+│       └── index.py       # PROJECT_INDEX, resolve_path()
+├── pyproject.toml
+├── requirements.txt       # -e .
+├── Justfile
+└── README.md              ← you are here
+```
 
 ## 📁 Where things moved
 
 Legacy monolith paths and their current locations:
 
 ```
-PySuite/                         (monorepo root — was the old “PyTools/PySuite” tree)
-├── PyCore/                      ← core/, cli.py, requirements.txt
-│   ├── cli.py
-│   ├── core/
-│   │   ├── converter/
-│   │   ├── datetime/time.py     ← was core/time/time.py
-│   │   ├── exceptions/
-│   │   └── io/
-│   └── office/
-├── PyCademy/                    ← was learning/
-│   ├── acronym.py
-│   ├── lists.py
-│   └── …
-├── PyPatterns/                  ← design pattern examples
-├── PhotoMixer/
+PySuite/                         (monorepo root)
+├── PyCore/                      ← src/core/, src/office/
+│   ├── cli.py                   # shim → core.cli
+│   └── src/core/converter/
+├── PyCademy/                    ← was learning/ → src/pycademy/
+├── PyTools/                     ← migration index → src/pytools/
+├── PyPatterns/
+├── PhotoMixer/                  ← src/photomixer/
+├── PyTests/                     ← src/pytests/
 ├── Awake/
-├── tests/
 ├── Justfile
 └── README.md
 ```
 
 | Old path | New location |
 | -------- | ------------ |
-| `cli.py` | [PyCore/cli.py](../PyCore/cli.py) |
-| `core/converter/` | [PyCore/core/converter/](../PyCore/core/converter/) |
-| `core/time/time.py` | [PyCore/core/datetime/time.py](../PyCore/core/datetime/time.py) |
-| `learning/*.py` | [PyCademy/](../PyCademy/) |
+| `cli.py` | [PyCore/src/core/cli.py](../PyCore/src/core/cli.py) |
+| `core/converter/` | [PyCore/src/core/converter/](../PyCore/src/core/converter/) |
+| `core/time/time.py` | [PyCore/src/core/datetime/time.py](../PyCore/src/core/datetime/time.py) |
+| `learning/*.py` | [PyCademy/src/pycademy/](../PyCademy/src/pycademy/) |
+| `photo_mixer.py` | [PhotoMixer/src/photomixer/cli.py](../PhotoMixer/src/photomixer/cli.py) |
 | Root `Justfile` (venv, convert) | [PyCore/Justfile](../PyCore/Justfile) and [root Justfile](../Justfile) |
 
 ## 🏗️ Architecture
@@ -187,13 +205,9 @@ flowchart TB
   PyTools["PyTools (this index)"] -.-> PyCore
   PyTools -.-> PyCademy
   PyTools -.-> PyPatterns
-
-  PyCore --> CLI["cli.py"]
-  PyCore --> Conv["core/converter/"]
-  PyCore --> Time["core/datetime/"]
 ```
 
-PyTools is documentation-only in this repository — run code from the linked project directories.
+PyTools provides both this README and a small **`pytools`** package (`PROJECT_INDEX`, `resolve_path`) for programmatic lookups. Run actual utilities from the linked project directories.
 
 ## 🧪 Testing
 
@@ -206,10 +220,8 @@ just convert -i README.md docx
 cd ../PyPatterns
 just singleton
 
-# Shared tests (when present)
-cd ..
-source venv/bin/activate
-python -m pytest tests/
+pip install -r PyTests/requirements.txt
+python -m pytest PyTests/
 ```
 
 ## 🛠️ Troubleshooting
@@ -222,7 +234,7 @@ python -m pytest tests/
 **`docx → pdf` fails or Word opens**
 
 - **Cause:** PyCore uses `docx2pdf`, which automates Microsoft Word on macOS/Windows
-- **Fix:** Install Word, or convert via markdown instead — see [PyCore/README.md](../PyCore/README.md)
+- **Fix:** Install Word, or convert via markdown — see [PyCore/README.md](../PyCore/README.md)
 
 **Import errors (`core.time`, `learning`)**
 
@@ -232,7 +244,7 @@ python -m pytest tests/
 | Issue | Fix |
 | ----- | --- |
 | Stale `--to` / `-o` flags | Use trailing format, `-f` / `--format`, and `--out` — see PyCore CLI help |
-| Empty PyTools folder | Expected — utilities live in sibling projects |
+| `KeyError` from `resolve_path` | Use a key from `PROJECT_INDEX` — run `just index` |
 
 ## 📚 References
 
@@ -245,8 +257,8 @@ python -m pytest tests/
 | [PyCademy](../PyCademy/README.md) | Learning scripts |
 | [PyPatterns](../PyPatterns/README.md) | Design pattern demos |
 | [PhotoMixer](../PhotoMixer/README.md) | Image blending |
+| [PyTests](../PyTests/README.md) | Shared test package |
 | [Awake](../Awake/README.md) | macOS menubar app |
-| [README-TEMPLATE.md](../README-TEMPLATE.md) | README structure template |
 
 ### External Documentation
 
@@ -254,7 +266,6 @@ python -m pytest tests/
 | ---- | ----------- |
 | [Just](https://github.com/casey/just) | Command runner |
 | [python-docx](https://python-docx.readthedocs.io/) | Word documents (PyCore) |
-| [Design Patterns (GoF)](https://en.wikipedia.org/wiki/Design_Patterns) | PyPatterns catalog |
 
 ## 📄 License
 

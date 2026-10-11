@@ -1,0 +1,1 @@
+# No runtime dependencies — patterns use the Python standard library only.

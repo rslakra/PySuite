@@ -14,19 +14,17 @@ import sys
 from pathlib import Path
 from typing import Any
 
-# Bootstrap: allow `core.*` imports when run as `python office/main.py`
-_pycore_root = Path(__file__).resolve().parents[1]
-if str(_pycore_root) not in sys.path:
-    sys.path.insert(0, str(_pycore_root))
-
 from core.io.paths import PathUtils
 
-# PoCSuite repo root; under PyCore layout ``office/main.py`` is one level below project root
-_SRC_ROOT = PathUtils.ensure_package_root_for_file(__file__, ancestor_levels=2)
+# src/ on sys.path when run as a script without editable install
+PathUtils.ensure_package_root_for_file(__file__, ancestor_levels=1)
+
+# Monorepo root (PySuite/) — src/office → src → PyCore → PySuite
+_REPO_ROOT = PathUtils.ensure_package_root_for_file(__file__, ancestor_levels=3)
 
 
 def _src_root() -> Path:
-    return _SRC_ROOT
+    return _REPO_ROOT
 
 
 def _load_agent_roster_module() -> Any:

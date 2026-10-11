@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pycademy"
+version = "0.1.0"
+description = "Standalone Python learning scripts and exercises for PySuite"
+readme = "README.md"
+requires-python = ">=3.12"
+license = { text = "MIT" }
+authors = [{ name = "Rohtash Lakra", email = "rslakra@ameyllc.com" }]
+dependencies = []
+
+[project.optional-dependencies]
+network = [
+    "twisted",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["pycademy*"]

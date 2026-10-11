@@ -1,195 +1,124 @@
 # PyPatterns
 
-Reference implementations of common object-oriented design patterns in Python, organized by category (creational, behavioral, structural).
+Reference implementations of **design patterns**, **concurrency patterns**, and **software architecture patterns** in Python. Each entry has a runnable `demo.py` and a `README.md` with Mermaid diagrams, pros/cons, and distributed-systems guidance.
+
+| Category | Count | Source |
+| -------- | ----- | ------ |
+| [Creational](creational/README.md) | 5 | [GoF / Design Patterns](https://en.wikipedia.org/wiki/Design_Patterns) |
+| [Structural](structural/README.md) | 7 | GoF |
+| [Behavioral](behavioral/README.md) | 11 | GoF (incl. Interpreter) |
+| [Concurrency](concurrency/README.md) | 21 | [Concurrency pattern](https://en.wikipedia.org/wiki/Concurrency_pattern) |
+| [Architecture](architecture/README.md) | 31 | [Software architecture — Patterns](https://en.wikipedia.org/wiki/Software_architecture#Patterns) |
+
+**Total: 75 patterns** — Python 3.12+ stdlib only, no install step.
 
 ## 🚀 Quick Start
 
-Patterns are plain Python modules — standard library only, no install step required.
-
 ```bash
 cd PyPatterns
-just singleton
-```
-
-Or run directly:
-
-```bash
-python3 creational/singleton.py
-```
-
-For optional shared tooling from the monorepo root, see **📋 Prerequisites & Dependencies** below.
-
-### Usage
-
-```bash
 just list
-just singleton
-just run creational/singleton.py
+just singleton                    # GoF
+just run concurrency/barrier    # concurrency
+just run architecture/saga      # architecture
+just run-all                    # all 75 demos
 ```
 
-Import into your own code (run from `PyPatterns/` or add it to `PYTHONPATH`):
-
-```python
-from creational.singleton import Singleton
-
-a = Singleton()
-b = Singleton()
-assert a is b  # same instance
-```
-
-### Output
-
-Running `singleton.py` prints instance identity and class information to stdout, demonstrating that repeated construction returns the same object.
-
-## ✨ Features
-
-- **Creational** — Object creation patterns (e.g. Singleton with thread-safe double-checked locking)
-- **Behavioral** — Communication patterns between objects (placeholder package for future examples)
-- **Structural** — Composition and adapter-style patterns (placeholder package for future examples)
-- **Runnable demos** — Each pattern module includes a `__main__` block where applicable
-- **Just tasks** — `just singleton`, `just list`, and `just run <module>` from this directory
-
-## 📋 Prerequisites & Dependencies
-
-- Python `3.12+`
-- [Just](https://github.com/casey/just) (optional — task runner for demos)
-- Standard library only (current patterns use `threading`)
-
-| Source | Purpose |
-| ------ | ------- |
-| Pattern subpackages | Self-contained example modules |
-| [PySuite README](../README.md) | Optional shared virtual environment |
-
-No `requirements.txt` — nothing to install for the current patterns.
-
-## ⚙️ Build & Configuration
-
-### Build
-
-No build step. Run demos with system `python3` or the optional monorepo venv:
-
-```bash
-cd PyPatterns
-just singleton
-```
-
-Optional shared venv from repo root:
-
-```bash
-cd ..
-just setup-venv
-source venv/bin/activate
-cd PyPatterns
-```
-
-No environment variables or configuration files are required.
-
-### Just commands
-
-Run from **PyPatterns/** (or `just pypatterns <command>` from the repo root):
-
-| Command | Description |
-| ------- | ----------- |
-| `just list` | List implemented and placeholder patterns |
-| `just singleton` | Run the Singleton demo |
-| `just run creational/singleton.py` | Run any pattern module |
-| `just help` | Show PyPatterns commands |
+From repo root: `just pypatterns list`
 
 ## 📁 Project Layout
 
 ```
 PyPatterns/
-├── creational/
-│   └── singleton.py    # Thread-safe Singleton
-├── behavioral/
-│   └── __init__.py     # Future behavioral patterns
-├── structural/
-│   └── __init__.py     # Future structural patterns
+├── creational/       # 5 GoF patterns
+├── structural/       # 7 GoF patterns
+├── behavioral/       # 11 GoF patterns
+├── concurrency/      # 21 concurrency patterns
+├── architecture/     # 31 architecture styles & patterns
 ├── Justfile
-└── README.md           ← you are here
+└── README.md
 ```
 
-| Path | Pattern | Status |
-| ---- | ------- | ------ |
-| `creational/singleton.py` | Singleton | Implemented |
-| `behavioral/` | Observer, Strategy, etc. | Placeholder |
-| `structural/` | Adapter, Facade, etc. | Placeholder |
+Each pattern folder:
+
+```
+concurrency/barrier/
+├── demo.py
+└── README.md
+```
+
+## 📖 Pattern Catalog
+
+Browse by category — each category README links to every pattern without duplicating per-pattern docs.
+
+| Category | Index |
+| -------- | ----- |
+| Creational (GoF) | [creational/README.md](creational/README.md) |
+| Structural (GoF) | [structural/README.md](structural/README.md) |
+| Behavioral (GoF) | [behavioral/README.md](behavioral/README.md) |
+| Concurrency | [concurrency/README.md](concurrency/README.md) |
+| Architecture | [architecture/README.md](architecture/README.md) |
+
+## ⚙️ Commands
+
+| Command | Description |
+| ------- | ----------- |
+| `just list` | List all categories |
+| `just run <category>/<pattern>` | Run one demo |
+| `just run-all` | Run all 75 demos |
+| `just run-all-gof` | GoF only (23) |
+| `just run-all-concurrency` | Concurrency only (21) |
+| `just run-all-architecture` | Architecture only (31) |
+| `just help` | Full command list |
 
 ## 🏗️ Architecture
 
 ```mermaid
 flowchart TB
-  subgraph creational ["Creational"]
-    S["Singleton\n(thread-safe __new__)"]
-  end
+  Root["PyPatterns (75)"]
+  Root --> GoF["GoF (23)"]
+  Root --> Con["Concurrency (21)"]
+  Root --> Arch["Architecture (31)"]
 
-  subgraph behavioral ["Behavioral"]
-    B["(future patterns)"]
-  end
-
-  subgraph structural ["Structural"]
-    ST["(future patterns)"]
-  end
-
-  PyPatterns["PyPatterns"] --> creational
-  PyPatterns --> behavioral
-  PyPatterns --> structural
+  GoF --> C["creational/"]
+  GoF --> S["structural/"]
+  GoF --> B["behavioral/"]
+  Con --> CDemo["concurrency/*/"]
+  Arch --> ADemo["architecture/*/"]
 ```
 
-Patterns are grouped by intent (GoF categories). Each file is independent — study or copy one pattern at a time without pulling in the rest of the package.
-
-### Singleton implementation
-
-`creational/singleton.py` uses:
-
-1. A class-level `_instance` holder
-2. A `threading.Lock` for concurrent safety
-3. Double-checked locking in `__new__` to avoid unnecessary synchronization
+**GoF** patterns are object-level. **Concurrency** patterns address threads and synchronization. **Architecture** patterns/styles address system structure and cross-service concerns.
 
 ## 🧪 Testing
 
 ```bash
-just singleton
-# or: python3 creational/singleton.py
-```
-
-Verify that two `Singleton()` calls refer to the same object (printed addresses and `counter` state should match).
-
-When pytest tests are added under the repo root `tests/` package, run:
-
-```bash
-source ../venv/bin/activate
-python -m pytest tests/
+just run-all
+just run architecture/circuit_breaker
+just run concurrency/thread_pool
 ```
 
 ## 🛠️ Troubleshooting
 
-**Import errors when importing from another directory**
-
-- **Cause:** Python cannot resolve the `creational` package from outside `PyPatterns/`
-- **Fix:** Run from `PyPatterns/`, use `just singleton`, or add `PyPatterns/` to `PYTHONPATH`
-
 | Issue | Fix |
 | ----- | --- |
-| Empty behavioral/structural folders | Only Singleton is implemented so far — add new patterns under the matching category |
-| `just: command not found` | Install Just or run `python3 creational/singleton.py` directly |
+| Import errors outside `PyPatterns/` | Run from this directory or `just run <pattern>` |
+| Old path `creational/singleton.py` | Now `creational/singleton/demo.py` |
 
 ## 📚 References
 
-### In this repository
-
-| README / Link | Description |
-| ------------- | ----------- |
-| [PySuite (root)](../README.md) | Monorepo index |
-| [PyCademy](../PyCademy/README.md) | Learning scripts and exercises |
-| [PyCore](../PyCore/README.md) | Production utilities |
-
-### External Documentation
-
 | Link | Description |
 | ---- | ----------- |
-| [Design Patterns (GoF)](https://en.wikipedia.org/wiki/Design_Patterns) | Classic pattern catalog |
-| [Python threading](https://docs.python.org/3/library/threading.html) | Lock used in Singleton |
+| [Design Patterns (GoF)](https://en.wikipedia.org/wiki/Design_Patterns) | 23 object-oriented patterns |
+| [Concurrency pattern](https://en.wikipedia.org/wiki/Concurrency_pattern) | Threading patterns |
+| [Software architecture](https://en.wikipedia.org/wiki/Software_architecture#Patterns) | System-level patterns & styles |
+| [Refactoring.Guru](https://refactoring.guru/design-patterns) | Visual GoF explanations |
+
+### In this repository
+
+| README | Description |
+| ------ | ----------- |
+| [PySuite (root)](../README.md) | Monorepo index |
+| [PyCademy](../PyCademy/README.md) | Learning scripts |
+| [PyCore](../PyCore/README.md) | Production utilities |
 
 ## 📄 License
 

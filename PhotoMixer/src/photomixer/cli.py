@@ -534,9 +534,9 @@ def main():
     opacity = max(0.0, min(1.0, args.opacity))
 
     # Determine output path - always save to images/mixed folder
-    output_dir = os.path.join(
-        os.path.dirname(os.path.dirname(__file__)), "images", "mixed"
-    )
+    # src/photomixer/cli.py → project root is two levels up from package dir
+    project_root = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+    output_dir = os.path.join(project_root, "images", "mixed")
     os.makedirs(output_dir, exist_ok=True)
 
     if args.output:

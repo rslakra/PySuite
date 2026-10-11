@@ -1,35 +1,32 @@
-# Photo Mixer - Justfile for common tasks
+# PhotoMixer — Justfile (run from PhotoMixer/)
 
-# Variables
-venv_pip := "./venv/bin/pip"
-venv_python := "./venv/bin/python"
+venv_name := "venv"
+venv_pip := "./" + venv_name + "/bin/pip"
+venv_python := "./" + venv_name + "/bin/python"
 
-# Default recipe - show available commands
+
 default:
     @just --list --unsorted
 
-# Create virtual environment
-venv:
-    @echo "Creating virtual environment..."
-    python3 -m venv venv
-    @echo "✓ Virtual environment created in ./venv"
+setup-venv:
+    python3 -m venv {{venv_name}}
+    @printf "\033[32m✓ Virtual environment created in ./{{venv_name}}\033[0m\n"
 
-# Install dependencies
-install: venv
-    @echo "Installing dependencies..."
+install-packages: setup-venv
     {{venv_pip}} install --upgrade pip
-    {{venv_pip}} install -r requirements.txt
-    @echo "✓ Dependencies installed"
+    {{venv_pip}} install -e .
+    @printf "\033[32m✓ Installed photomixer (src layout)\033[0m\n"
 
-# Run the photo mixer
+# Alias for install-packages
+setup: install-packages
+
+clean:
+    rm -rf {{venv_name}}
+
 run background foreground *args:
     #!/usr/bin/env bash
     set -eu
-    
-    # Build the command with required arguments
-    CMD="{{venv_python}} src/photo_mixer.py --background \"{{background}}\" --foreground \"{{foreground}}\""
-    
-    # Parse optional arguments - handle each argument separately
+    CMD="{{venv_python}} -m photomixer.cli --background \"{{background}}\" --foreground \"{{foreground}}\""
     for arg in {{args}}; do
         if [[ "$arg" == output=* ]]; then
             OUTPUT="${arg#output=}"
@@ -45,31 +42,10 @@ run background foreground *args:
             CMD="$CMD --bg-threshold \"$BG_THRESHOLD\""
         fi
     done
-    
-    # Execute the command
     eval "$CMD"
 
-# Setup everything (venv + install)
-setup: install
-    @echo "✓ Setup complete! You can now run 'just run <bg> <fg>'"
-
-# Clean virtual environment
-clean:
-    @echo "Removing virtual environment..."
-    rm -rf venv
-    @echo "✓ Virtual environment removed"
-
-# Show help
 help:
-    @echo "Photo Mixer - Available commands:"
-    @echo ""
-    @echo "  just setup              - Create venv and install dependencies"
-    @echo "  just install            - Install dependencies (creates venv if needed)"
-    @echo "  just run <bg> <fg> [options] - Run photo mixer"
-    @echo "  just clean              - Remove virtual environment"
-    @echo "  just help               - Show this help message"
-    @echo ""
-    @echo "Examples:"
-    @echo "  just run images/original/bg.jpg images/original/fg.jpg"
-    @echo "  just run bg.jpg fg.jpg output=result.jpg blend_mode=multiply opacity=0.9"
-
+    @printf "\033[1mPhotoMixer commands:\033[0m\n"
+    @echo "  just install-packages   pip install -e ."
+    @echo "  just run BG FG [options]  Blend two images"
+    @echo "  just clean              Remove venv/"

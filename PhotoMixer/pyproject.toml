@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "photomixer"
+version = "0.1.0"
+description = "Blend foreground and background images with Pillow, numpy, and scipy"
+readme = "README.md"
+requires-python = ">=3.12"
+license = { text = "MIT" }
+authors = [{ name = "Rohtash Lakra", email = "rslakra@ameyllc.com" }]
+dependencies = [
+    "Pillow>=10.0.0",
+    "numpy>=1.24.0",
+    "scipy>=1.10.0",
+]
+
+[project.scripts]
+photomixer = "photomixer.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["photomixer*"]

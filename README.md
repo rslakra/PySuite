@@ -1,62 +1,46 @@
 # PySuite
 
-A Python monorepo of utilities, learning exercises, and small tools — document conversion, time handling, design patterns, image mixing, and macOS helpers.
+A Python monorepo of utilities, learning exercises, design patterns, image tools, and macOS helpers. Every project is self-contained: **run commands from inside the project folder** and follow that project's README. This file only covers what is shared across the repo.
 
 ## 🚀 Quick Start
-
-Get the shared virtual environment ready from the repository root, then open any child project.
 
 ```bash
 git clone https://github.com/rslakra/PySuite
 cd PySuite
-
-# PyCore (recommended — self-contained)
-cd PyCore && just setup-venv && source venv/bin/activate && just install-packages
-
-# Or use the root Justfile for Awake / shared venv
-cd .. && just setup-venv && source venv/bin/activate && just install-packages
 ```
 
-For project-specific setup and usage, see the README in each subdirectory below.
+Then pick a module, `cd` into it, and follow its **Quick Start**. Not sure where to begin? Start with **PyCore** (the main utility library).
 
-### Usage
+| Module | Description | Run from | Setup & usage |
+| ------ | ----------- | -------- | ------------- |
+| [Awake](Awake/) | macOS menubar app that prevents system sleep | `Awake/` scripts, or `just run-awake` at the repo root | [Awake › Quick Start](Awake/README.md#quick-start) |
+| [Data](Data/) | Sample documents and conversion artifacts (md, docx, pdf) | — (data only, nothing to run) | [Data › Quick Start](Data/README.md#-quick-start) |
+| [PhotoMixer](PhotoMixer/) | Blend two images with opacity and blend modes | `PhotoMixer/` with `just` | [PhotoMixer › Quick Start](PhotoMixer/README.md#-quick-start) |
+| [PyCademy](PyCademy/) | Standalone Python learning scripts and Jupyter notebooks | `PyCademy/` with `just` | [PyCademy › Quick Start](PyCademy/README.md#-quick-start) |
+| [PyCore](PyCore/) | Document converter CLI, UTC/TAI time utils, HTTP exceptions, office/Excel tooling | `PyCore/` with `just` | [PyCore › Quick Start](PyCore/README.md#-quick-start) |
+| [PyPatterns](PyPatterns/) | 75 patterns — GoF, concurrency, and software architecture demos | `PyPatterns/` with `just` | [PyPatterns › Quick Start](PyPatterns/README.md#-quick-start) |
+| [Pyse](Pyse/) | `Amey-Pyse` library — context stack, enums, I/O and HTTP helpers (`import pyse`) | `Pyse/` with `make` | [Pyse › Quick Start](Pyse/README.md#-quick-start) |
+| [PyTests](PyTests/) | Shared pytest package for monorepo tests | `PyTests/` with `pip` / `pytest` | [PyTests › Quick Start](PyTests/README.md#-quick-start) |
+| [PyTools](PyTools/) | Migration index — where monolith utilities moved | `PyTools/` with `just` | [PyTools › Quick Start](PyTools/README.md#-quick-start) |
 
-Run a child project after activating the venv:
-
-```bash
-# Document conversion (PyCore)
-cd PyCore && python cli.py --list
-
-# Photo mixing (PhotoMixer)
-cd PhotoMixer && just run bg.jpg fg.jpg
-
-# Awake menubar app
-just run-awake
-```
-
-### Output
-
-Each project writes artifacts to its own directory (converted documents beside the input file, mixed images under `PhotoMixer/images/mixed/`, etc.). See the child README for details.
+From the repo root you can also delegate to a project's Justfile, e.g. `just pycore list` — see [Just commands](#just-commands).
 
 ## ✨ Features
 
-- **PyCore** — CLI document converter (markdown, Word, PDF) and UTC/TAI time utilities with leap-second support
-- **PyCademy** — Standalone Python learning scripts and small exercises
-- **PyPatterns** — Reference implementations of common design patterns
-- **PhotoMixer** — Blend two images with configurable opacity and blend modes
-- **Awake** — macOS menubar app that prevents system sleep
+- **Independent projects** — each folder has its own README, dependencies and tooling
+- **`src/` package layout** — PyCore, PhotoMixer, PyCademy, PyTools, PyTests and Pyse are installable with `pip install -e .`
+- **Root task runner** — [Justfile](Justfile) delegates to project Justfiles and manages an optional shared venv
+- **Mixed tooling** — `just` for most projects, `make` for Pyse, plain scripts for Awake
+
+Module descriptions are in the [Quick Start](#-quick-start) table above.
 
 ## 📋 Prerequisites & Dependencies
 
-- Python `3.12+`
-- [Just](https://github.com/casey/just) command runner (optional but recommended)
+- Python `3.12+` (Pyse supports `3.10+` — see its README)
+- [Just](https://github.com/casey/just) (optional — task runners in PyCore, PhotoMixer, PyCademy, PyTools, PyPatterns, and at repo root)
+- `make` (Pyse only)
 
-| Source | Purpose |
-| ------ | ------- |
-| [`PyCore/requirements.txt`](PyCore/requirements.txt) | PyCore runtime packages (installed via `just install-packages` in `PyCore/`) |
-| [`requirements.txt`](requirements.txt) | Same deps at repo root (for root Justfile) |
-| [`PhotoMixer/requirements.txt`](PhotoMixer/requirements.txt) | Pillow and deps for PhotoMixer |
-| [`Awake/requirements.txt`](Awake/requirements.txt) | rumps and deps for the menubar app |
+Each project documents its own packages in its README and `requirements.txt` (where applicable). The root [requirements.txt](requirements.txt) mirrors PyCore for the optional shared venv via `just install-packages`.
 
 ### Installing Just
 
@@ -73,123 +57,147 @@ cargo install just
 
 ## ⚙️ Build & Configuration
 
-### Build
+Per-project build, install and configuration steps live in each project's **Build & Configuration** section — run them from that project's folder:
+
+| Module | Build & configuration |
+| ------ | --------------------- |
+| Awake | [Awake › Building for Distribution](Awake/README.md#building-for-distribution) |
+| Data | [Data › Build & Configuration](Data/README.md#-build--configuration) |
+| PhotoMixer | [PhotoMixer › Build & Configuration](PhotoMixer/README.md#-build--configuration) |
+| PyCademy | [PyCademy › Build & Configuration](PyCademy/README.md#-build--configuration) |
+| PyCore | [PyCore › Build & Configuration](PyCore/README.md#-build--configuration) |
+| PyPatterns | [PyPatterns › Commands](PyPatterns/README.md#-commands) |
+| Pyse | [Pyse › Build & Configuration](Pyse/README.md#-build--configuration) |
+| PyTests | [PyTests › Build & Configuration](PyTests/README.md#-build--configuration) |
+| PyTools | [PyTools › Build & Configuration](PyTools/README.md#-build--configuration) |
+
+No `.env` file is required at the monorepo level. Configuration is via CLI flags in each project.
+
+### Root venv (optional)
+
+A shared venv at the repo root for PyCore deps and Awake:
 
 ```bash
 just setup-venv
 source venv/bin/activate
-just install-packages        # PyCore / root deps
-just install-awake             # Awake-only deps (optional)
+just install-packages
 ```
-
-PhotoMixer has its own Justfile — see [PhotoMixer/README.md](PhotoMixer/README.md).
 
 ### Just commands
 
 Run from the **repository root**:
 
-| Command | Description |
-| ------- | ----------- |
-| `just setup-venv` | Create root `venv/` |
-| `just install-packages` | Install root `requirements.txt` |
-| `just pycore ARGS...` | Delegate to [PyCore/Justfile](PyCore/Justfile) |
+| Command                   | Description                                            |
+| ------------------------- | ------------------------------------------------------ |
+| `just setup-venv`         | Create root `venv/`                                    |
+| `just install-packages`   | Install root `requirements.txt`                        |
+| `just pycore ARGS...`     | Delegate to [PyCore/Justfile](PyCore/Justfile)         |
 | `just photomixer ARGS...` | Delegate to [PhotoMixer/Justfile](PhotoMixer/Justfile) |
+| `just pycademy ARGS...`   | Delegate to [PyCademy/Justfile](PyCademy/Justfile)     |
+| `just pytools ARGS...`    | Delegate to [PyTools/Justfile](PyTools/Justfile)       |
 | `just pypatterns ARGS...` | Delegate to [PyPatterns/Justfile](PyPatterns/Justfile) |
-| `just install-awake` | Install Awake deps into root venv |
-| `just run-awake` | Run Awake menubar app |
-| `just build-awake` | Build `Awake.app` bundle |
-| `just clean` | Remove root virtual environment |
-| `just help` | Show all commands by project |
+| `just install-awake`      | Install Awake deps into root venv                      |
+| `just run-awake`          | Run Awake menubar app                                  |
+| `just build-awake`        | Build `Awake.app` bundle                               |
+| `just clean`              | Remove root virtual environment                        |
+| `just help`               | Show all commands by project                           |
 
-PyCore, PhotoMixer, and PyPatterns each have project-specific commands — see their READMEs or run `just pycore help`, `just photomixer help`, `just pypatterns help`.
+Pyse uses its own [Makefile](Pyse/Makefile). PyTests, Data, and Awake (except the root recipes above) have no project Justfile — run pytest or scripts directly. See each folder's README.
 
 ## 📁 Project Layout
 
 ```
 PySuite/
-├── PyCore/           # Document converter CLI and time utilities
-├── PyCademy/         # Learning scripts and exercises
-├── PyPatterns/       # Design pattern examples
-├── PhotoMixer/       # Image blending tool
-├── Awake/            # macOS sleep-prevention menubar app
-├── tests/            # Shared test package
-├── requirements.txt  # PyCore dependencies
+├── Awake/            # macOS menubar sleep-prevention app
+├── Data/             # Sample documents (md, docx, pdf)
+├── PhotoMixer/       # src/photomixer — image blending CLI
+├── PyCademy/         # src/pycademy — learning scripts and notebooks
+├── PyCore/           # src/core, src/office — converter, time utils, office CLI
+├── PyPatterns/       # GoF + concurrency + architecture patterns
+├── Pyse/             # src/pyse — Amey-Pyse library (make-based, PyPI-published)
+├── PyTests/          # src/pytests — shared pytest package
+├── PyTools/          # src/pytools — migration index package
+├── requirements.txt  # Root venv (PyCore deps)
 ├── Justfile          # Root task automation
 └── README.md         ← you are here
 ```
 
-| Path | Description |
-| ---- | ----------- |
-| [PyCore/](PyCore/) | Core libraries and `cli.py` entry point |
-| [PyCademy/](PyCademy/) | Runnable Python learning examples |
-| [PyPatterns/](PyPatterns/) | Creational, behavioral, and structural patterns |
-| [PhotoMixer/](PhotoMixer/) | CLI photo compositing |
-| [Awake/](Awake/) | macOS menubar utility |
+Other root files: [README-TEMPLATE.md](README-TEMPLATE.md), [PYTHON-JWT-LIBRARIES.md](PYTHON-JWT-LIBRARIES.md).
 
 ## 🏗️ Architecture
+
+The monorepo is a flat set of sibling folders — no shared runtime between projects except the optional root `venv/`:
 
 ```mermaid
 flowchart TB
   Root["PySuite (root)"]
-  Root --> PyCore
-  Root --> PyCademy
-  Root --> PyPatterns
-  Root --> PhotoMixer
-  Root --> Awake
 
-  PyCore --> CLI["cli.py"]
-  PyCore --> Conv["core/converter/"]
-  PyCore --> Time["core/datetime/"]
+  subgraph projects ["Top-level folders (in repo order)"]
+    direction TB
+    Awake["Awake"]
+    Data["Data"]
+    PhotoMixer["PhotoMixer"]
+    PyCademy["PyCademy"]
+    PyCore["PyCore"]
+    PyPatterns["PyPatterns"]
+    Pyse["Pyse"]
+    PyTests["PyTests"]
+    PyTools["PyTools"]
+  end
+
+  Root --> projects
 ```
 
-Child projects are independent Python packages or scripts. They share the root `venv/` when you use the root Justfile; PhotoMixer and Awake can also manage their own environments.
+PyCore, PhotoMixer, PyCademy, PyTools, PyTests, and Pyse use a `src/` package layout. PyPatterns is stdlib-only with runnable demos under category folders. Data holds sample conversion outputs (see [PyCore/README.md](PyCore/README.md) for converter internals).
 
 ## 🧪 Testing
 
-```bash
-source venv/bin/activate
-python -m pytest tests/    # when tests are present
-```
+Run tests from inside each project and follow its **Testing** section:
 
-Individual projects may include local test scripts (e.g. under `Awake/test/`).
+| Module | Testing |
+| ------ | ------- |
+| Awake | [Awake/test/](Awake/test/) scripts, see [Awake/README.md](Awake/README.md) |
+| Data | [Data › Testing](Data/README.md#-testing) |
+| PhotoMixer | [PhotoMixer › Testing](PhotoMixer/README.md#-testing) |
+| PyCademy | [PyCademy › Testing](PyCademy/README.md#-testing) |
+| PyCore | [PyCore › Testing](PyCore/README.md#-testing) |
+| PyPatterns | [PyPatterns › Testing](PyPatterns/README.md#-testing) |
+| Pyse | [Pyse › Testing](Pyse/README.md#-testing) |
+| PyTests | [PyTests › Testing](PyTests/README.md#-testing) (shared monorepo tests) |
+| PyTools | [PyTools › Testing](PyTools/README.md#-testing) |
 
 ## 🛠️ Troubleshooting
 
-**`just: command not found`**
-
-- **Cause:** Just is not installed or not on your `PATH`
-- **Fix:** Install Just (see **📋 Prerequisites & Dependencies**) or run equivalent `python3 -m venv` / `pip install` commands manually
-
-**Import errors when running PyCore**
-
-- **Cause:** Dependencies not installed or venv not activated
-- **Fix:** `source venv/bin/activate` then `just install-packages` from the repo root
-
 | Issue | Fix |
 | ----- | --- |
-| `docx -> pdf` fails | Requires Microsoft Word on macOS or Windows (`docx2pdf`) |
+| `just: command not found` | Just is not installed or not on your `PATH` — see [Installing Just](#installing-just), or run `python3 -m venv` / `pip install` manually |
+| Import errors when running a project | Dependencies not installed or venv not activated — follow that project's **Build & Configuration** section (for PyCore: [PyCore › Quick Start](PyCore/README.md#-quick-start)) |
+| `docx → pdf` fails | Requires Microsoft Word on macOS/Windows — see [PyCore/README.md](PyCore/README.md) |
 | Awake icon not visible | Build and run the `.app` bundle — see [Awake/README.md](Awake/README.md) |
+| Looking for root `cli.py` | Moved to [PyCore/src/core/cli.py](PyCore/src/core/cli.py) — see [PyTools/README.md](PyTools/README.md) |
+
+More project-specific fixes are in each README's **Troubleshooting** section.
 
 ## 📚 References
 
 ### In this repository
 
-| README / Link | Description |
-| ------------- | ----------- |
-| [PyCore](PyCore/README.md) | Document converter and time utilities |
-| [PyCademy](PyCademy/README.md) | Learning examples |
-| [PyPatterns](PyPatterns/README.md) | Design pattern implementations |
-| [PyTools](PyTools/README.md) | Migration index — where monolith tools moved |
-| [PhotoMixer](PhotoMixer/README.md) | Image blending CLI |
-| [Awake](Awake/README.md) | macOS menubar sleep prevention |
+Module READMEs are linked from the [Quick Start](#-quick-start) table.
+
+| File | Description |
+| ---- | ----------- |
+| [Justfile](Justfile) | Root task automation |
+| [requirements.txt](requirements.txt) | Root venv dependencies (mirrors PyCore) |
 | [README-TEMPLATE.md](README-TEMPLATE.md) | README structure template |
+| [PYTHON-JWT-LIBRARIES.md](PYTHON-JWT-LIBRARIES.md) | Notes on Python JWT libraries |
 
 ### External Documentation
 
-| Link | Description |
-| ---- | ----------- |
-| [Just](https://github.com/casey/just) | Command runner used by root Justfile |
-| [python-docx](https://python-docx.readthedocs.io/) | Word document library used by PyCore |
+| Link                                               | Description                   |
+| -------------------------------------------------- | ----------------------------- |
+| [Just](https://github.com/casey/just)              | Command runner                |
+| [python-docx](https://python-docx.readthedocs.io/) | Word documents (PyCore)       |
+| [Pillow](https://pillow.readthedocs.io/)           | Image processing (PhotoMixer) |
 
 ## 📄 License
 

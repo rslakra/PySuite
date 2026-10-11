@@ -2,37 +2,117 @@
 
 python := "python3"
 
+gof_patterns := " \
+  creational/abstract_factory creational/builder creational/factory_method \
+  creational/prototype creational/singleton \
+  structural/adapter structural/bridge structural/composite structural/decorator \
+  structural/facade structural/flyweight structural/proxy \
+  behavioral/chain_of_responsibility behavioral/command behavioral/interpreter \
+  behavioral/iterator behavioral/mediator behavioral/memento behavioral/observer \
+  behavioral/state behavioral/strategy behavioral/template_method behavioral/visitor \
+"
 
-# Default recipe — show available commands
+concurrency_patterns := " \
+  concurrency/active_object concurrency/atomic_operation concurrency/balking \
+  concurrency/barrier concurrency/binding_properties concurrency/compute_kernel \
+  concurrency/double_checked_locking concurrency/event_based_asynchronous \
+  concurrency/exclusive_ownership concurrency/guarded_suspension concurrency/join_pattern \
+  concurrency/lock concurrency/messaging concurrency/monitor_object \
+  concurrency/nuclear_reaction concurrency/reactor concurrency/read_write_lock \
+  concurrency/scheduler concurrency/service_handler concurrency/thread_pool \
+  concurrency/thread_specific_storage \
+"
+
+architecture_patterns := " \
+  architecture/async_messaging architecture/backends_for_frontends \
+  architecture/batch_request architecture/blackboard architecture/circuit_breaker \
+  architecture/claim_check architecture/client_server architecture/competing_consumers \
+  architecture/event_driven architecture/hexagonal architecture/inbox_outbox \
+  architecture/layered architecture/microkernel architecture/microservices \
+  architecture/monolithic architecture/mvc architecture/peer_to_peer \
+  architecture/pipes_and_filters architecture/publish_subscribe \
+  architecture/published_interfaces architecture/queue_load_leveling \
+  architecture/rate_limiting architecture/request_response architecture/retry \
+  architecture/rule_based architecture/saga architecture/service_based \
+  architecture/service_oriented architecture/space_based architecture/strangler_fig \
+  architecture/throttling \
+"
+
+all_patterns := gof_patterns + " " + concurrency_patterns + " " + architecture_patterns
+
+
 default:
     @just --list --unsorted
 
-# ── Pattern demos (stdlib only — no venv required) ────────────────────────────
+run pattern:
+    {{python}} {{pattern}}/demo.py
 
-# Run the Singleton demo (creational/singleton.py)
-singleton:
-    {{python}} creational/singleton.py
+run-all:
+    #!/usr/bin/env bash
+    set -eu
+    for p in {{all_patterns}}; do
+      printf "\033[36m▶ %s\033[0m\n" "$p"
+      {{python}} "$p/demo.py"
+      echo ""
+    done
 
-# Run any pattern module — e.g. just run creational/singleton.py
-run module:
-    {{python}} {{module}}
+run-all-gof:
+    #!/usr/bin/env bash
+    set -eu
+    for p in {{gof_patterns}}; do
+      printf "\033[36m▶ %s\033[0m\n" "$p"
+      {{python}} "$p/demo.py"
+    done
 
-# List implemented pattern modules
+run-all-concurrency:
+    #!/usr/bin/env bash
+    set -eu
+    for p in {{concurrency_patterns}}; do
+      printf "\033[36m▶ %s\033[0m\n" "$p"
+      {{python}} "$p/demo.py"
+    done
+
+run-all-architecture:
+    #!/usr/bin/env bash
+    set -eu
+    for p in {{architecture_patterns}}; do
+      printf "\033[36m▶ %s\033[0m\n" "$p"
+      {{python}} "$p/demo.py"
+    done
+
 list:
-    @printf "Implemented patterns:\n"
-    @printf "  creational/singleton.py  — Singleton (thread-safe)\n"
-    @printf "\nPlaceholder packages:\n"
-    @printf "  behavioral/\n"
-    @printf "  structural/\n"
+    @printf "\033[1mGoF (23)\033[0m → creational/ structural/ behavioral/ READMEs\n"
+    @printf "\033[1mConcurrency (21)\033[0m → concurrency/README.md\n"
+    @printf "\033[1mArchitecture (31)\033[0m → architecture/README.md\n"
+    @printf "\nRun: just run <category>/<pattern>\n"
+    @printf "     just run-all | run-all-gof | run-all-concurrency | run-all-architecture\n"
 
-# Show help
+# ── GoF shortcuts ─────────────────────────────────────────────────────────────
+
+singleton:
+    {{python}} creational/singleton/demo.py
+
+observer:
+    {{python}} behavioral/observer/demo.py
+
+facade:
+    {{python}} structural/facade/demo.py
+
+circuit-breaker:
+    {{python}} architecture/circuit_breaker/demo.py
+
+saga:
+    {{python}} architecture/saga/demo.py
+
+barrier:
+    {{python}} concurrency/barrier/demo.py
+
 help:
-    @printf "\033[1m\033[34mPyPatterns commands (run from PyPatterns/):\033[0m\n"
+    @printf "\033[1mPyPatterns — 75 patterns (GoF + concurrency + architecture)\033[0m\n"
+    @printf "Indexes: creational/README.md structural/README.md behavioral/README.md\n"
+    @printf "         concurrency/README.md architecture/README.md\n"
     @echo ""
-    @printf "\033[33mPattern demos:\033[0m\n"
-    @printf "\033[36m  just singleton\033[0m               - Run Singleton demo\n"
-    @printf "\033[36m  just run creational/singleton.py\033[0m - Run any module path\n"
-    @printf "\033[36m  just list\033[0m                    - List patterns\n"
+    @printf "\033[33mRun:\033[0m just run <category>/<pattern>\n"
+    @printf "     just run-all | run-all-gof | run-all-concurrency | run-all-architecture\n"
     @echo ""
-    @printf "\033[33mFrom repo root:\033[0m \033[36mjust pypatterns <command>\033[0m\n"
-    @echo ""
+    @printf "\033[33mFrom repo root:\033[0m just pypatterns <command>\n"
