@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pysuite-pytests"
+version = "0.1.0"
+description = "Shared pytest utilities and monorepo test package for PySuite"
+readme = "README.md"
+requires-python = ">=3.12"
+license = { text = "MIT" }
+authors = [{ name = "Rohtash Lakra", email = "rslakra@ameyllc.com" }]
+dependencies = [
+    "pytest>=7.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest-cov>=4.0",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["pytests*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src", "../PyCore/src"]
