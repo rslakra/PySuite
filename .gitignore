@@ -1,44 +1,43 @@
-# macOS system files
+# Generic .gitignore. Learn more: https://www.atlassian.com/git/tutorials/saving-changes/gitignore
+# The last matching rule wins, so the "Exceptions" section is kept at the end.
+
+# OS files
 .DS_Store
 .AppleDouble
 .LSOverride
+Thumbs.db
 
-# Editor and IDE files
-.idea/
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
+# Application/Installer Packages
+*.app
+*.exe
+*.dmg
+
+# Claude Code: personal settings (shared .claude/settings.json can be committed)
+.claude/settings.local.json
+
+# Editor swap and backup files
 *.swp
 *~
-.vscode/
 
+# Gradle
+.gradle/
 
-#Kubernete
-*.key
-*.pem
-*.crt
-kubeconfig
-secrets/
+# IntelliJ IDEA
+.idea/
+*.iws
+*.iml
+*.ipr
 
-# Build output and temporary files
-build/
-dist/
-*.o
-*.obj
-*.pyc
+# Java / JVM
 *.class
-*.app
+*.jar
+*.war
+target/
+bin/
 
-# Dependency directories
-node_modules/
-vendor/
-bower_components/
-
-# Environment and configuration files
-.env
-*.env.*
-!.env.example
+# Local Databases
+*.db
+*.db-*
 
 # Logs
 *.log
@@ -47,34 +46,108 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Virtual environment (Python)
-env/
-.env/
-.venv/
-venv/
+# Maven
+.mvn/
 
+# Native build output
+*.o
+*.obj
 
-# Cache files
+# NetBeans
+/nbproject/private/
+/nbbuild/
+/nbdist/
+/.nb-gradle/
+
+# Node and other dependency directories
+node_modules/
+*.tsbuildinfo
+*.tgz
+vendor/
+bower_components/
+
+# Python: bytecode and caches
 __pycache__/
 *.py[cod]
 *$py.class
+*.so
 .cache/
+
+# Python: packaging and build output
+/VERSION
+build/
+dist/
+out/
+*.egg-info/
+*.egg
+.eggs/
+pip-wheel-metadata/
+
+# Python: virtual environments and local config
+.venv/
+venv/
+env/
+.env
+.env.*
+!.env.example
+
+# Secrets: signing keys and certificates (.p12 is used for macOS signing), Kubernetes
+*.pem
+*.p12
+*.pfx
+*.crt
+*.key
+kubeconfig
+secrets/
+
+# STS
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+# Tests, coverage and type checkers
 .pytest_cache/
-
-# Coverage reports
-coverage/
+.mypy_cache/
+.ruff_cache/
 .coverage
-*.cover
 *.coverage.*
+*.cover
+htmlcov/
+coverage/
+TEST*.xml
 
-# Temporary files
+# Visual Studio
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# VS Code: personal editor settings stay local; shared launch/tasks/recommendations are committed
+**/.vscode/*
+!**/.vscode/extensions.json
+!**/.vscode/launch.json
+!**/.vscode/tasks.json
+*.vsix
+.vscode-test/
+
+# Temporary and backup files
 *.tmp
 *.bak
-*.swp
-*~
 
+# Large media files
+*.mp4
+*.avi
+*.flv
+*.mov
+*.wmv
+*.tiff
 
-# Project-specific ignores (customize as needed)
-# Add any specific files or folders for your project here
+# Exceptions: files the rules above would exclude but that must be committed.
+# Keep this section last: in .gitignore the last matching rule wins.
 
-.ruff_cache/
+# Gradle wrapper jar (excluded by *.jar above; ./gradlew and CI need it)
+!**/gradle/wrapper/gradle-wrapper.jar

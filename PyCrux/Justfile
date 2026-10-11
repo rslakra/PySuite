@@ -1,0 +1,64 @@
+# PyCrux — Justfile (run from PyCrux/)
+# Environment setup, build and release live in the Makefile; this file adds
+# shortcuts for running the converter and demos.
+
+venv_name := ".venv"
+venv_python := "./" + venv_name + "/bin/python"
+
+
+default:
+    @just --list --unsorted
+
+# ── Environment (delegates to the Makefile) ───────────────────────────────────
+
+setup:
+    make setup
+
+test:
+    make test
+
+clean:
+    make clean
+
+clean-all:
+    make clean-all
+
+# ── Document converter (pycrux.cli) ───────────────────────────────────────────
+
+list:
+    {{venv_python}} -m pycrux.cli --list
+
+convert *ARGS:
+    {{venv_python}} -m pycrux.cli {{ARGS}}
+
+convert-to input format:
+    {{venv_python}} -m pycrux.cli -i "{{input}}" "{{format}}"
+
+cli-help:
+    {{venv_python}} -m pycrux.cli -h
+
+# ── Library demos ─────────────────────────────────────────────────────────────
+
+time-demo:
+    {{venv_python}} -m pycrux.datetime.time
+
+help:
+    @printf "\033[1m\033[34mPyCrux commands (run from PyCrux/):\033[0m\n"
+    @echo ""
+    @printf "\033[33mEnvironment (via make):\033[0m\n"
+    @printf "\033[36m  just setup\033[0m                   - Create .venv and install with dev extras\n"
+    @printf "\033[36m  just test\033[0m                    - Run pytest\n"
+    @printf "\033[36m  just clean\033[0m                   - Remove build artifacts and caches\n"
+    @printf "\033[36m  just clean-all\033[0m               - clean + remove .venv\n"
+    @echo ""
+    @printf "\033[33mDocument converter:\033[0m\n"
+    @printf "\033[36m  just list\033[0m                    - Supported conversions\n"
+    @printf "\033[36m  just convert -i FILE pdf\033[0m           - Convert to a format\n"
+    @printf "\033[36m  just convert -i FILE -f pdf\033[0m         - Same, with --format flag\n"
+    @printf "\033[36m  just convert -i FILE --out OUT\033[0m    - Explicit output path\n"
+    @printf "\033[36m  just convert-to FILE md\033[0m           - Shorthand: input + format\n"
+    @printf "\033[36m  just cli-help\033[0m                - pycrux.cli help\n"
+    @echo ""
+    @printf "\033[33mLibrary demos:\033[0m\n"
+    @printf "\033[36m  just time-demo\033[0m               - UTC/TAI leap-second demo\n"
+    @echo ""

@@ -19,7 +19,7 @@ Then pick a module, `cd` into it, and follow its **Quick Start**. Not sure where
 | [PyCademy](PyCademy/) | Standalone Python learning scripts and Jupyter notebooks | `PyCademy/` with `just` | [PyCademy › Quick Start](PyCademy/README.md#-quick-start) |
 | [PyCore](PyCore/) | Document converter CLI, UTC/TAI time utils, HTTP exceptions, office/Excel tooling | `PyCore/` with `just` | [PyCore › Quick Start](PyCore/README.md#-quick-start) |
 | [PyPatterns](PyPatterns/) | 75 patterns — GoF, concurrency, and software architecture demos | `PyPatterns/` with `just` | [PyPatterns › Quick Start](PyPatterns/README.md#-quick-start) |
-| [Pyse](Pyse/) | `Amey-Pyse` library — context stack, enums, I/O and HTTP helpers (`import pyse`) | `Pyse/` with `make` | [Pyse › Quick Start](Pyse/README.md#-quick-start) |
+| [PyCrux](PyCrux/) | `Amey-PyCrux` library — context stack, enums, I/O and HTTP helpers (`import pycrux`) | `PyCrux/` with `make` | [PyCrux › Quick Start](PyCrux/README.md#-quick-start) |
 | [PyTests](PyTests/) | Shared pytest package for monorepo tests | `PyTests/` with `pip` / `pytest` | [PyTests › Quick Start](PyTests/README.md#-quick-start) |
 | [PyTools](PyTools/) | Migration index — where monolith utilities moved | `PyTools/` with `just` | [PyTools › Quick Start](PyTools/README.md#-quick-start) |
 
@@ -28,17 +28,17 @@ From the repo root you can also delegate to a project's Justfile, e.g. `just pyc
 ## ✨ Features
 
 - **Independent projects** — each folder has its own README, dependencies and tooling
-- **`src/` package layout** — PyCore, PhotoMixer, PyCademy, PyTools, PyTests and Pyse are installable with `pip install -e .`
+- **`src/` package layout** — PyCore, PhotoMixer, PyCademy, PyTools, PyTests and PyCrux are installable with `pip install -e .`
 - **Root task runner** — [Justfile](Justfile) delegates to project Justfiles and manages an optional shared venv
-- **Mixed tooling** — `just` for most projects, `make` for Pyse, plain scripts for Awake
+- **Mixed tooling** — `just` for most projects, `make` for PyCrux, plain scripts for Awake
 
 Module descriptions are in the [Quick Start](#-quick-start) table above.
 
 ## 📋 Prerequisites & Dependencies
 
-- Python `3.12+` (Pyse supports `3.10+` — see its README)
+- Python `3.12+` (PyCrux supports `3.10+` — see its README)
 - [Just](https://github.com/casey/just) (optional — task runners in PyCore, PhotoMixer, PyCademy, PyTools, PyPatterns, and at repo root)
-- `make` (Pyse only)
+- `make` (PyCrux only)
 
 Each project documents its own packages in its README and `requirements.txt` (where applicable). The root [requirements.txt](requirements.txt) mirrors PyCore for the optional shared venv via `just install-packages`.
 
@@ -67,7 +67,7 @@ Per-project build, install and configuration steps live in each project's **Buil
 | PyCademy | [PyCademy › Build & Configuration](PyCademy/README.md#-build--configuration) |
 | PyCore | [PyCore › Build & Configuration](PyCore/README.md#-build--configuration) |
 | PyPatterns | [PyPatterns › Commands](PyPatterns/README.md#-commands) |
-| Pyse | [Pyse › Build & Configuration](Pyse/README.md#-build--configuration) |
+| PyCrux | [PyCrux › Build & Configuration](PyCrux/README.md#-build--configuration) |
 | PyTests | [PyTests › Build & Configuration](PyTests/README.md#-build--configuration) |
 | PyTools | [PyTools › Build & Configuration](PyTools/README.md#-build--configuration) |
 
@@ -102,7 +102,7 @@ Run from the **repository root**:
 | `just clean`              | Remove root virtual environment                        |
 | `just help`               | Show all commands by project                           |
 
-Pyse uses its own [Makefile](Pyse/Makefile). PyTests, Data, and Awake (except the root recipes above) have no project Justfile — run pytest or scripts directly. See each folder's README.
+PyCrux uses its own [Makefile](PyCrux/Makefile). PyTests, Data, and Awake (except the root recipes above) have no project Justfile — run pytest or scripts directly. See each folder's README.
 
 ## 📁 Project Layout
 
@@ -114,7 +114,7 @@ PySuite/
 ├── PyCademy/         # src/pycademy — learning scripts and notebooks
 ├── PyCore/           # src/core, src/office — converter, time utils, office CLI
 ├── PyPatterns/       # GoF + concurrency + architecture patterns
-├── Pyse/             # src/pyse — Amey-Pyse library (make-based, PyPI-published)
+├── PyCrux/             # src/pycrux — Amey-PyCrux library (make-based, PyPI-published)
 ├── PyTests/          # src/pytests — shared pytest package
 ├── PyTools/          # src/pytools — migration index package
 ├── requirements.txt  # Root venv (PyCore deps)
@@ -140,7 +140,7 @@ flowchart TB
     PyCademy["PyCademy"]
     PyCore["PyCore"]
     PyPatterns["PyPatterns"]
-    Pyse["Pyse"]
+    PyCrux["PyCrux"]
     PyTests["PyTests"]
     PyTools["PyTools"]
   end
@@ -148,7 +148,7 @@ flowchart TB
   Root --> projects
 ```
 
-PyCore, PhotoMixer, PyCademy, PyTools, PyTests, and Pyse use a `src/` package layout. PyPatterns is stdlib-only with runnable demos under category folders. Data holds sample conversion outputs (see [PyCore/README.md](PyCore/README.md) for converter internals).
+PyCore, PhotoMixer, PyCademy, PyTools, PyTests, and PyCrux use a `src/` package layout. PyPatterns is stdlib-only with runnable demos under category folders. Data holds sample conversion outputs (see [PyCore/README.md](PyCore/README.md) for converter internals).
 
 ## 🧪 Testing
 
@@ -162,7 +162,7 @@ Run tests from inside each project and follow its **Testing** section:
 | PyCademy | [PyCademy › Testing](PyCademy/README.md#-testing) |
 | PyCore | [PyCore › Testing](PyCore/README.md#-testing) |
 | PyPatterns | [PyPatterns › Testing](PyPatterns/README.md#-testing) |
-| Pyse | [Pyse › Testing](Pyse/README.md#-testing) |
+| PyCrux | [PyCrux › Testing](PyCrux/README.md#-testing) |
 | PyTests | [PyTests › Testing](PyTests/README.md#-testing) (shared monorepo tests) |
 | PyTools | [PyTools › Testing](PyTools/README.md#-testing) |
 
