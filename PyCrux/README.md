@@ -1,6 +1,6 @@
 # PyCrux
 
-Shared Python utilities — enums, logging, I/O helpers, thread-local contexts, HTTP exceptions, document conversion, UTC/TAI time and office/Excel tooling — published as **`Amey-PyCrux`** on PyPI and imported as `pycrux`.
+Shared Python utilities — enums, logging, I/O helpers, thread-local contexts, HTTP exceptions, document conversion, UTC/TAI time and office/Excel tooling — published as **`PyCrux`** on PyPI and imported as `pycrux`.
 
 ## 🚀 Quick Start
 
@@ -40,16 +40,16 @@ path = IOUtils.resolve("config/app.yaml")
 Install it in another project (after publish) and import `pycrux`:
 
 ```bash
-python3 -m pip install Amey-PyCrux
+python3 -m pip install PyCrux
 ```
 
 Optional extras:
 
 ```bash
-python3 -m pip install "Amey-PyCrux[dotenv]"    # IOUtils.load_env()
-python3 -m pip install "Amey-PyCrux[convert]"   # pycrux.converter / pycrux.cli
-python3 -m pip install "Amey-PyCrux[time]"      # pycrux.datetime (leap seconds)
-python3 -m pip install "Amey-PyCrux[all]"       # everything above
+python3 -m pip install "PyCrux[dotenv]"    # IOUtils.load_env()
+python3 -m pip install "PyCrux[convert]"   # pycrux.converter / pycrux.cli
+python3 -m pip install "PyCrux[time]"      # pycrux.datetime (leap seconds)
+python3 -m pip install "PyCrux[all]"       # everything above
 ```
 
 Document converter (`pycrux.cli`, also installed as the `pycrux-convert` command):
@@ -140,7 +140,7 @@ Example: `just convert -i README.md` creates `README.docx` beside `README.md`.
 
 ```bash
 make setup          # .venv + editable install with dev extras
-make build          # dist/amey_pycrux-*.tar.gz and *.whl
+make build          # dist/pycrux-*.tar.gz and *.whl
 make rebuild        # clean + build
 make version        # print the version the next build will get
 ```
@@ -324,7 +324,7 @@ PyCrux/
 
 ```mermaid
 flowchart TB
-  PKG["Amey-PyCrux\n(PyPI)"] --> PS["pycrux package"]
+  PKG["PyCrux\n(PyPI)"] --> PS["pycrux package"]
   PS --> CTX["pycrux.threads"]
   PS --> ENUM["pycrux.enums"]
   PS --> LOG["pycrux.logging"]
@@ -338,7 +338,7 @@ flowchart TB
   CONV --> OFF
 ```
 
-Consuming projects depend on `Amey-PyCrux` in `pyproject.toml` and import `pycrux.*`. Tests import **public** names from `pycrux.*`, not relative source paths — same as consumer code.
+Consuming projects depend on `PyCrux` in `pyproject.toml` and import `pycrux.*`. Tests import **public** names from `pycrux.*`, not relative source paths — same as consumer code.
 
 ### Data flow
 
@@ -447,8 +447,8 @@ Notes:
 | `make deploy` says "Uncommitted changes" | Commit first (the version is the commit count), or use `ALLOW_DIRTY=1` |
 | `make` says "Shallow git clone" | `git fetch --unshallow` (CI: `fetch-depth: 0`) |
 | `pip install -e .` fails: no such file `VERSION` | Run `make version-file` (or `make setup`) first |
-| `ImportError: Missing required library` from the converter | Install the extra: `pip install "Amey-PyCrux[convert]"` |
-| `pycrux.datetime` fails to import | Install `leapseconddata`: `pip install "Amey-PyCrux[time]"` |
+| `ImportError: Missing required library` from the converter | Install the extra: `pip install "PyCrux[convert]"` |
+| `pycrux.datetime` fails to import | Install `leapseconddata`: `pip install "PyCrux[time]"` |
 | `docx → pdf` fails or Word opens | `docx2pdf` drives Microsoft Word (macOS/Windows only) — install Word, or convert via Markdown |
 | `import pycrux.io.base` fails: no module `solidlsp` | Those modules need the language-server packages (not a declared dependency); `pycrux.io.paths` / `pycrux.io.utils` work without them |
 | New type not importable | Re-export it from the package `__init__.py` |
@@ -470,7 +470,7 @@ Notes:
 | Link | Description |
 | ---- | ----------- |
 | [Packaging Python Projects](https://packaging.python.org/en/latest/tutorials/packaging-projects) | Build and publish guide |
-| [Amey-PyCrux on PyPI](https://pypi.org/project/Amey-PyCrux/) | Published package (when available) |
+| [PyCrux on PyPI](https://pypi.org/project/PyCrux/) | Published package (when available) |
 | [PyPI](https://pypi.org) / [TestPyPI](https://test.pypi.org) | Production and staging package indexes |
 | [pytest](https://docs.pytest.org/) | Test runner |
 | [Just](https://github.com/casey/just) | Task runner |

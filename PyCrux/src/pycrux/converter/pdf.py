@@ -4,7 +4,7 @@ from pycrux.converter.abstract import AbstractConverter
 
 try:
     from docx2pdf import convert as docx2pdf_convert
-except ImportError:  # optional dependency: pip install "Amey-PyCrux[convert]"
+except ImportError:  # optional dependency: pip install "PyCrux[convert]"
     docx2pdf_convert = None  # type: ignore[assignment]
 
 

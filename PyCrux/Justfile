@@ -6,42 +6,53 @@ venv_name := ".venv"
 venv_python := "./" + venv_name + "/bin/python"
 
 
+# List the available recipes (default)
 default:
     @just --list --unsorted
 
 # ── Environment (delegates to the Makefile) ───────────────────────────────────
 
+# Create .venv and install PyCrux with dev extras (make setup)
 setup:
     make setup
 
+# Run the pytest suite (make test)
 test:
     make test
 
+# Remove build artifacts and caches (make clean)
 clean:
     make clean
 
+# clean + remove .venv (make clean-all)
 clean-all:
     make clean-all
 
 # ── Document converter (pycrux.cli) ───────────────────────────────────────────
 
+# Show the supported document conversions
 list:
     {{venv_python}} -m pycrux.cli --list
 
+# Convert a document, e.g. just convert -i FILE pdf
 convert *ARGS:
     {{venv_python}} -m pycrux.cli {{ARGS}}
 
+# Shorthand: convert INPUT to FORMAT, e.g. just convert-to notes.docx md
 convert-to input format:
     {{venv_python}} -m pycrux.cli -i "{{input}}" "{{format}}"
 
+# Show the pycrux.cli help
 cli-help:
     {{venv_python}} -m pycrux.cli -h
 
 # ── Library demos ─────────────────────────────────────────────────────────────
 
+# Run the UTC/TAI leap-second demo
 time-demo:
     {{venv_python}} -m pycrux.datetime.time
 
+# Print a colored summary of all PyCrux commands
 help:
     @printf "\033[1m\033[34mPyCrux commands (run from PyCrux/):\033[0m\n"
     @echo ""

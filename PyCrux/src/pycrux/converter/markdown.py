@@ -4,7 +4,7 @@ from pycrux.converter.abstract import AbstractConverter
 
 try:
     from docx import Document
-except ImportError:  # optional dependency: pip install "Amey-PyCrux[convert]"
+except ImportError:  # optional dependency: pip install "PyCrux[convert]"
     Document = None  # type: ignore[assignment,misc]
 
 

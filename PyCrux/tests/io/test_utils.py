@@ -111,7 +111,7 @@ def test_load_env_without_a_file_is_a_noop(tmp_path) -> None:
 
 def test_load_env_without_python_dotenv_raises_a_helpful_error(monkeypatch) -> None:
     monkeypatch.setattr(utils_module, "load_dotenv", None)
-    with pytest.raises(ImportError, match=r"pip install Amey-PyCrux\[dotenv\]"):
+    with pytest.raises(ImportError, match=r"pip install PyCrux\[dotenv\]"):
         IOUtils.load_env()
 
 

@@ -1,6 +1,6 @@
 # pycrux.logging
 
-Consistent, configurable logging for any application — a stdlib-only layer over Python's `logging` that adds **text / JSON / XML output**, a **Mapped Diagnostic Context (MDC)**, and **complete exception capture** (full stack + cause chain). Import from `pycrux.logging` after installing [Amey-PyCrux](../../../README.md).
+Consistent, configurable logging for any application — a stdlib-only layer over Python's `logging` that adds **text / JSON / XML output**, a **Mapped Diagnostic Context (MDC)**, and **complete exception capture** (full stack + cause chain). Import from `pycrux.logging` after installing [PyCrux](../../../README.md).
 
 ## 🚀 Quick Start
 
@@ -51,7 +51,7 @@ The package is class-based: `LogManager` (setup), `MDC` (context), `LogConfigPar
 
 ## 📋 Prerequisites & Dependencies
 
-- **Amey-PyCrux** / editable `pycrux` install
+- **PyCrux** / editable `pycrux` install
 - **stdlib only** (`logging`, `contextvars`, `json`, `xml.etree`)
 
 | File | Contents |

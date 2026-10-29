@@ -2,7 +2,7 @@ from pathlib import Path
 
 from pycrux.converter.abstract import AbstractConverter
 
-# Optional dependencies (pip install "Amey-PyCrux[convert]"): a missing library is reported when a
+# Optional dependencies (pip install "PyCrux[convert]"): a missing library is reported when a
 # conversion runs, so importing this module (and listing conversions) works without them.
 try:
     import markdown

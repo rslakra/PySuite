@@ -17,8 +17,8 @@
 #   100  -> 1.0.0     101  -> 1.0.1     199  -> 1.0.99    200  -> 1.1.0     999  -> 1.8.99
 #   1000 -> 2.0.0     1234 -> 2.2.34    9999 -> 2.89.99   10000 -> 3.0.0
 #
-# A bigger N always gives a bigger version, and no two Ns give the same one. VS Code Marketplace, Open VSX and
-# JetBrains Marketplace all refuse a version that was already published, so that's what a release needs.
+# A bigger N always gives a bigger version, and no two Ns give the same one. PyPI and TestPyPI refuse a
+# re-upload of a version that was already published, so that's what a release needs.
 # Each range starts at .0 (10 -> 0.1.0, 100 -> 1.0.0, 1000 -> 2.0.0), and the patch part is always 0-99.
 # Pure bash and integer arithmetic: works with the bash 3.2 that ships with macOS.
 

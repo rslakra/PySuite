@@ -1,6 +1,6 @@
 # pycrux.threads
 
-Thread-local, stackable context variables — import from `pycrux.threads` after installing [Amey-PyCrux](../../../README.md).
+Thread-local, stackable context variables — import from `pycrux.threads` after installing [PyCrux](../../../README.md).
 
 ## 🚀 Quick Start
 
@@ -30,7 +30,7 @@ Public types: `Context`, `ContextStack`, `StackUnderflow` (also available as `Co
 
 ## 📋 Prerequisites & Dependencies
 
-- **Amey-PyCrux** / editable `pycrux` install
+- **PyCrux** / editable `pycrux` install
 - **stdlib only** (`threading`)
 
 | File | Type | Depends on |
