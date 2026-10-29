@@ -19,7 +19,7 @@ Then pick a module, `cd` into it, and follow its **Quick Start**. Not sure where
 | [PyCademy](PyCademy/) | Standalone Python learning scripts and Jupyter notebooks | `PyCademy/` with `just` | [PyCademy › Quick Start](PyCademy/README.md#-quick-start) |
 | [PyCore](PyCore/) | Document converter CLI, UTC/TAI time utils, HTTP exceptions, office/Excel tooling | `PyCore/` with `just` | [PyCore › Quick Start](PyCore/README.md#-quick-start) |
 | [PyPatterns](PyPatterns/) | 75 patterns — GoF, concurrency, and software architecture demos | `PyPatterns/` with `just` | [PyPatterns › Quick Start](PyPatterns/README.md#-quick-start) |
-| [PyCrux](PyCrux/) | `Amey-PyCrux` library — context stack, enums, I/O and HTTP helpers (`import pycrux`) | `PyCrux/` with `make` | [PyCrux › Quick Start](PyCrux/README.md#-quick-start) |
+| [PyCrux](PyCrux/) | `PyCrux` library — context stack, enums, I/O and HTTP helpers (`import pycrux`) | `PyCrux/` with `make` | [PyCrux › Quick Start](PyCrux/README.md#-quick-start) |
 | [PyTests](PyTests/) | Shared pytest package for monorepo tests | `PyTests/` with `pip` / `pytest` | [PyTests › Quick Start](PyTests/README.md#-quick-start) |
 | [PyTools](PyTools/) | Migration index — where monolith utilities moved | `PyTools/` with `just` | [PyTools › Quick Start](PyTools/README.md#-quick-start) |
 
@@ -114,7 +114,7 @@ PySuite/
 ├── PyCademy/         # src/pycademy — learning scripts and notebooks
 ├── PyCore/           # src/core, src/office — converter, time utils, office CLI
 ├── PyPatterns/       # GoF + concurrency + architecture patterns
-├── PyCrux/             # src/pycrux — Amey-PyCrux library (make-based, PyPI-published)
+├── PyCrux/             # src/pycrux — PyCrux library (make-based, PyPI-published)
 ├── PyTests/          # src/pytests — shared pytest package
 ├── PyTools/          # src/pytools — migration index package
 ├── requirements.txt  # Root venv (PyCore deps)

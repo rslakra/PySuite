@@ -6,7 +6,7 @@ from pathlib import Path
 
 try:
     from dotenv import load_dotenv
-except ImportError:  # optional dependency: pip install "Amey-PyCrux[dotenv]"
+except ImportError:  # optional dependency: pip install "PyCrux[dotenv]"
     load_dotenv = None  # type: ignore[assignment]
 
 __all__ = ["IOUtils"]
@@ -28,7 +28,7 @@ class IOUtils:
         if load_dotenv is None:
             raise ImportError(
                 "python-dotenv is required for load_env(). "
-                "Install with: pip install Amey-PyCrux[dotenv]"
+                "Install with: pip install PyCrux[dotenv]"
             )
         load_dotenv(cls.CUR_PATH / filename)
 

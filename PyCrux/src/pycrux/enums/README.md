@@ -1,6 +1,6 @@
 # pycrux.enums
 
-Enumerations for deployment environment, devices, OS, and byte sizes — import from `pycrux.enums` after installing [Amey-PyCrux](../../../README.md).
+Enumerations for deployment environment, devices, OS, and byte sizes — import from `pycrux.enums` after installing [PyCrux](../../../README.md).
 
 ## 🚀 Quick Start
 
@@ -25,7 +25,7 @@ Public types: `BaseEnum`, `CaseInsensitiveEnum`, `DeviceType`, `EnvType`, `OS`, 
 
 ## 📋 Prerequisites & Dependencies
 
-- **Amey-PyCrux** / editable `pycrux` install
+- **PyCrux** / editable `pycrux` install
 - **stdlib only** — `EnvType` and `SizeUnit` have no internal enum dependencies
 
 | File | Type | Depends on |
